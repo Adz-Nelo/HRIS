@@ -1,0 +1,20 @@
+
+    /* Ledger Table Specific Styling */
+    .ledger-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+    .ledger-table th { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; color: #475569; }
+    .ledger-table td { border: 1px solid #f1f5f9; padding: 12px 10px; text-align: center; }
+    .ledger-table td:nth-child(2) { text-align: left; }
+    
+    .vl-header { background: #eff6ff !important; color: #1e40af !important; border-bottom: none !important; }
+    .sl-header { background: #fff7ed !important; color: #9a3412 !important; border-bottom: none !important; }
+    .sub-th { font-size: 10px; text-transform: uppercase; background: #fff !important; border-top: none !important; }
+
+    .text-green { color: #16a34a; font-weight: 600; }
+    .text-red { color: #dc2626; font-weight: 600; }
+    .font-weight-600 { font-weight: 600; color: #334155; }
+    
+    /* Progress and Stat Colors */
+    .stat-icon.blue { background: #ebf5ff; color: #3b82f6; }
+    .stat-icon.orange { background: #fff7ed; color: #f97316; }
+    .stat-icon.green { background: #f0fdf4; color: #22c55e; }
+    .stat-icon.red { background: #fef2f2; color: #ef4444; }

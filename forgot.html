@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRMS - Forgot Password</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+    --primary-color: #0056b3;
+    --primary-hover: #004085;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-color: #343a40;
+    --border-color: #ced4da;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --success-color: #28a745;
+    --success-bg: #d4edda;
+}
+
+html { overflow-y: scroll; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.forgot-container {
+    background-color: var(--card-background);
+    padding: 42px;
+    border-radius: 14px;
+    box-shadow: 0 6px 25px var(--shadow-color);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.logo-container {
+    margin-bottom: 18px;
+}
+
+.logo {
+    max-width: 130px;
+    height: auto;
+}
+
+.forgot-container h2 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    color: #6c757d;
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+.step-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+}
+
+.step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--border-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.step.active {
+    background-color: var(--primary-color);
+}
+
+.step.completed {
+    background-color: var(--success-color);
+}
+
+.step-line {
+    width: 30px;
+    height: 3px;
+    background-color: var(--border-color);
+}
+
+.step-line.completed {
+    background-color: var(--success-color);
+}
+
+.input-group { 
+    margin-bottom: 22px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.input-icon-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.icon-left {
+    position: absolute;
+    left: 16px;
+    color: var(--border-color);
+    font-size: 18px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 16px;
+    color: var(--border-color);
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+input {
+    width: 100%;
+    padding: 15px 52px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+}
+
+.pin-input {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 8px;
+    padding: 15px 20px;
+}
+
+.info-text {
+    font-size: 13px;
+    color: #6c757d;
+    margin-top: 8px;
+    text-align: left;
+}
+
+.email-display {
+    background-color: #e7f3ff;
+    border-left: 4px solid var(--primary-color);
+    padding: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.email-display strong {
+    color: var(--primary-color);
+}
+
+.password-requirements {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 8px;
+    text-align: left;
+}
+
+.password-requirements ul {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.password-requirements li {
+    margin: 3px 0;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+}
+
+button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+.helper-links {
+    margin-top: 18px;
+    font-size: 14px;
+    text-align: center;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.error-message {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.success-message {
+    color: var(--success-color);
+    background-color: var(--success-bg);
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.loading {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.resend-link {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.resend-link button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    font-size: 13px;
+    width: auto;
+    display: inline;
+}
+
+.resend-link button:hover {
+    color: var(--primary-hover);
+}
+
+.resend-link button:disabled {
+    color: var(--border-color);
+    cursor: not-allowed;
+}
+</style>
+</head>
+
+<body>
+
+<div class="forgot-container">
+    <div class="logo-container">
+        <img src="/redefence/assets/images/HRMS.png" alt="HRMS Logo" class="logo">
+    </div>
+
+    <h2>Forgot Password</h2>
+    <p class="subtitle" id="step-subtitle">Enter your registered email address</p>
+
+    <div class="step-indicator">
+        <div class="step active" id="step-1">1</div>
+        <div class="step-line" id="line-1"></div>
+        <div class="step" id="step-2">2</div>
+        <div class="step-line" id="line-2"></div>
+        <div class="step" id="step-3">3</div>
+    </div>
+
+    <div class="error-message" id="error-message" style="display:none;"></div>
+    <div class="success-message" id="success-message" style="display:none;"></div>
+
+    <!-- STEP 1: Enter Email -->
+    <div class="form-step active" id="form-step-1">
+        <form id="email-form">
+            <div class="input-group">
+                <label>Email Address</label>
+                <div class="input-icon-group">
+                    <i class="fas fa-envelope icon-left"></i>
+                    <input type="email" name="email" id="email" placeholder="Enter your registered email" required>
+                </div>
+                <div class="info-text">
+                    We'll send a 6-digit PIN to this email address
+                </div>
+            </div>
+            <button type="submit" id="email-btn">
+                <span id="email-btn-text">Send PIN</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- STEP 2: Enter PIN -->
+    <div class="form-step" id="form-step-2">
+        <div class="email-display">
+            <strong>PIN sent to:</strong><br>
+            <span id="display-email"></span>
+        </div>
+
+        <form id="pin-form">
+            <input type="hidden" name="email" id="email-hidden">
+            
+            <div class="input-group">
+                <label>Enter 6-Digit PIN</label>
+                <div class="input-icon-group">
+                    <i class="fas fa-key icon-left"></i>
+                    <input type="text" name="pin" id="pin" class="pin-input" placeholder="000000" maxlength="6" required pattern="[0-9]{6}">
+                </div>
+                <div class="info-text">
+                    The PIN will expire in 15 minutes
+                </div>
+            </div>
+
+            <button type="submit" id="pin-btn">
+                <span id="pin-btn-text">Verify PIN</span>
+            </button>
+
+            <div class="resend-link">
+                Didn't receive the PIN? 
+                <button type="button" id="resend-btn">Resend PIN</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- STEP 3: Reset Password -->
+    <div class="form-step" id="form-step-3">
+        <div class="email-display">
+            <strong>Resetting password for:</strong><br>
+            <span id="reset-email"></span>
+        </div>
+
+        <form id="reset-form">
+            <div class="input-group">
+                <label>New Password</label>
+                <div class="input-icon-group">
+                    <i class="fas fa-lock icon-left"></i>
+                    <input type="password" name="password" id="password" placeholder="Enter new password" required>
+                    <i class="far fa-eye toggle-password" id="password-toggle"></i>
+                </div>
+                <div class="password-requirements">
+                    <ul>
+                        <li>At least 8 characters</li>
+                        <li>Include uppercase and lowercase letters</li>
+                        <li>Include at least one number</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Confirm New Password</label>
+                <div class="input-icon-group">
+                    <i class="fas fa-lock icon-left"></i>
+                    <input type="password" name="confirm" id="confirm" placeholder="Re-enter new password" required>
+                    <i class="far fa-eye toggle-password" id="confirm-toggle"></i>
+                </div>
+            </div>
+
+            <button type="submit" id="reset-btn">
+                <span id="reset-btn-text">Reset Password</span>
+            </button>
+        </form>
+    </div>
+
+    <div class="helper-links">
+        <a href="login.html"><i class="fas fa-arrow-left"></i> Back to Login</a>
+    </div>
+</div>
+
+<script>
+const API_URL = 'PHP/forgot.php';
+let userEmail = '';
+
+// Message Display Functions
+function showError(message) {
+    const errorBox = document.getElementById('error-message');
+    errorBox.textContent = message;
+    errorBox.style.display = 'block';
+    document.getElementById('success-message').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showSuccess(message) {
+    const successBox = document.getElementById('success-message');
+    successBox.textContent = message;
+    successBox.style.display = 'block';
+    document.getElementById('error-message').style.display = 'none';
+}
+
+function hideMessages() {
+    document.getElementById('error-message').style.display = 'none';
+    document.getElementById('success-message').style.display = 'none';
+}
+
+// Step Navigation
+function goToStep(stepNumber, subtitle) {
+    document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+    document.getElementById(`form-step-${stepNumber}`).classList.add('active');
+    
+    document.getElementById('step-subtitle').textContent = subtitle;
+    
+    // Update step indicators
+    for (let i = 1; i <= 3; i++) {
+        const step = document.getElementById(`step-${i}`);
+        step.classList.remove('active', 'completed');
+        
+        if (i === stepNumber) {
+            step.classList.add('active');
+        } else if (i < stepNumber) {
+            step.classList.add('completed');
+        }
+        
+        // Update lines
+        if (i < 3) {
+            const line = document.getElementById(`line-${i}`);
+            if (i < stepNumber) {
+                line.classList.add('completed');
+            } else {
+                line.classList.remove('completed');
+            }
+        }
+    }
+    
+    hideMessages();
+}
+
+// STEP 1: Send PIN to Email
+document.getElementById('email-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMessages();
+    
+    const email = document.getElementById('email').value.trim();
+    
+    if (!email) {
+        showError('Please enter your email address.');
+        return;
+    }
+    
+    const btn = document.getElementById('email-btn');
+    const btnText = document.getElementById('email-btn-text');
+    
+    btn.disabled = true;
+    btnText.innerHTML = '<span class="loading"></span>';
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'forgot',
+                email: email
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'ok') {
+            userEmail = email;
+            document.getElementById('email-hidden').value = email;
+            document.getElementById('display-email').textContent = email;
+            showSuccess(data.message);
+            setTimeout(() => {
+                goToStep(2, 'Enter the PIN sent to your email');
+            }, 1500);
+        } else {
+            showError(data.message || 'Failed to send PIN. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showError('Network error. Please check your connection and try again.');
+    } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Send PIN';
+    }
+});
+
+// Resend PIN
+document.getElementById('resend-btn').addEventListener('click', async () => {
+    hideMessages();
+    
+    const btn = document.getElementById('resend-btn');
+    btn.disabled = true;
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'forgot',
+                email: userEmail
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'ok') {
+            showSuccess('PIN resent successfully! Check your email.');
+        } else {
+            showError(data.message || 'Failed to resend PIN.');
+        }
+    } catch (error) {
+        showError('Network error. Please try again.');
+    } finally {
+        setTimeout(() => {
+            btn.disabled = false;
+        }, 30000); // 30 second cooldown
+    }
+});
+
+// STEP 2: Verify PIN
+document.getElementById('pin-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMessages();
+    
+    const pin = document.getElementById('pin').value.trim();
+    const email = document.getElementById('email-hidden').value;
+    
+    if (pin.length !== 6 || !/^\d{6}$/.test(pin)) {
+        showError('Please enter a valid 6-digit PIN.');
+        return;
+    }
+    
+    const btn = document.getElementById('pin-btn');
+    const btnText = document.getElementById('pin-btn-text');
+    
+    btn.disabled = true;
+    btnText.innerHTML = '<span class="loading"></span>';
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'verify_pin',
+                email: email,
+                pin: pin
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'ok') {
+            document.getElementById('reset-email').textContent = email;
+            showSuccess(data.message);
+            setTimeout(() => {
+                goToStep(3, 'Create your new password');
+            }, 1500);
+        } else {
+            showError(data.message || 'Invalid or expired PIN.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showError('Network error. Please try again.');
+    } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Verify PIN';
+    }
+});
+
+// STEP 3: Reset Password
+document.getElementById('reset-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMessages();
+    
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm').value;
+    
+    // Validate password match
+    if (password !== confirm) {
+        showError('Passwords do not match. Please try again.');
+        return;
+    }
+    
+    // Password strength validation
+    if (password.length < 8) {
+        showError('Password must be at least 8 characters long.');
+        return;
+    }
+    
+    if (!/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
+        showError('Password must include both uppercase and lowercase letters.');
+        return;
+    }
+    
+    if (!/[0-9]/.test(password)) {
+        showError('Password must include at least one number.');
+        return;
+    }
+    
+    const btn = document.getElementById('reset-btn');
+    const btnText = document.getElementById('reset-btn-text');
+    
+    btn.disabled = true;
+    btnText.innerHTML = '<span class="loading"></span>';
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'reset_password',
+                password: password,
+                confirm: confirm
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.status === 'ok') {
+            showSuccess(data.message + ' Redirecting to login...');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        } else {
+            showError(data.message || 'Failed to reset password.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showError('Network error. Please try again.');
+    } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Reset Password';
+    }
+});
+
+// Password Toggle Functionality
+document.getElementById('password-toggle').addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+});
+
+document.getElementById('confirm-toggle').addEventListener('click', function() {
+    const confirmInput = document.getElementById('confirm');
+    const type = confirmInput.type === 'password' ? 'text' : 'password';
+    confirmInput.type = type;
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+});
+
+// Auto-format PIN input (numbers only)
+document.getElementById('pin').addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+</script>
+
+</body>
+</html>

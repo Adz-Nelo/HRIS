@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRMS - 2FA Verification</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f4f6;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .verify-card {
+        background-color: #fff;
+        padding: 30px 40px;
+        border-radius: 10px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+    .verify-card h2 {
+        color: #1d4ed8;
+        margin-bottom: 10px;
+    }
+    .verify-card p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+    #timer {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1d4ed8;
+        margin-bottom: 20px;
+        display: none; /* initially hidden */
+    }
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+        position: relative;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    .form-group .input-icon {
+        position: relative;
+    }
+    .form-group .input-icon i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #1d4ed8;
+        font-size: 16px;
+        pointer-events: none;
+    }
+    .form-group .input-icon input {
+        width: 100%;
+        padding: 10px 12px 10px 38px; /* leave space for icon */
+        border: 1px solid #d1d5db;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+    .btn-primary {
+        width: 100%;
+        background-color: #1d4ed8;
+        color: #fff;
+        border: none;
+        padding: 12px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #1e40af;
+    }
+    .alert {
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+    .alert-error {
+        background-color: #fee2e2;
+        color: #b91c1c;
+    }
+    .resend-link {
+        margin-top: 15px;
+        display: block;
+        font-size: 14px;
+        color: #1d4ed8;
+        text-decoration: none;
+    }
+    .resend-link:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+<div class="verify-card">
+    <h2>Two-Factor Verification</h2>
+    <p>Please enter the 6-digit code from your authenticator app to complete registration.</p>
+
+    <!-- Timer -->
+    <div id="timer">03:00</div>
+
+    <div id="alertContainer"></div>
+
+    <form id="verifyForm">
+        <div class="form-group">
+            <label for="code">Verification Code</label>
+            <div class="input-icon">
+                <i class="fas fa-shield-alt"></i>
+                <input type="text" name="code" id="code" placeholder="123456" maxlength="6" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary">
+            <i class="fas fa-shield-alt"></i> Verify
+        </button>
+    </form>
+
+    <a href="#" class="resend-link" id="resendCode">Resend Code</a>
+</div>
+
+<script>
+const form = document.getElementById('verifyForm');
+const alertContainer = document.getElementById('alertContainer');
+const resendLink = document.getElementById('resendCode');
+const timerElement = document.getElementById('timer');
+
+let totalSeconds = 3 * 60; // 3 minutes
+let timerInterval = null;
+
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+}
+
+function updateTimer() {
+    if (totalSeconds <= 0) {
+        timerElement.style.display = 'none'; // hide timer
+        showAlert('error', 'Time expired! Please resend the code.');
+        clearInterval(timerInterval);
+    } else {
+        timerElement.textContent = formatTime(totalSeconds);
+        totalSeconds--;
+    }
+}
+
+form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const code = document.getElementById('code').value.trim();
+    if(!code || code.length !==6){
+        showAlert('error','Please enter a valid 6-digit code.');
+        return;
+    }
+
+    fetch('PHP/register.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({action:'verify', code:code})
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        if(data.status==='ok'){
+            showAlert('success', data.message);
+            setTimeout(()=>window.location.href=data.redirect||'login.html',1500);
+        } else {
+            showAlert('error', data.message);
+        }
+    })
+    .catch(err=>{
+        showAlert('error','An error occurred. Please try again.');
+        console.error(err);
+    });
+});
+
+// RESEND CODE HANDLER
+resendLink.addEventListener('click', function(e){
+    e.preventDefault();
+
+    fetch('PHP/register.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({action:'resend'})
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        if(data.status==='ok'){
+            showAlert('success', data.message);
+            // Show timer
+            timerElement.style.display = 'block';
+            totalSeconds = 3 * 60; // reset 3 minutes
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        } else {
+            showAlert('error', data.message);
+        }
+    })
+    .catch(err=>{
+        showAlert('error','An error occurred. Please try again.');
+        console.error(err);
+    });
+});
+
+function showAlert(type,message){
+    alertContainer.innerHTML=`<div class="alert alert-${type==='ok'||type==='success'?'success':'error'}">${message}</div>`;
+}
+</script>
+</body>
+</html>
