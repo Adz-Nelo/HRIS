@@ -1,0 +1,274 @@
+<?php
+function createStyledServiceRecord() {
+    $pdf = <<<PDF
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R/Resources << /ProcSet [/PDF /Text] /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 3500 >>
+stream
+% PAGE MARGINS: Left 36pt, Right 36pt (540pt width available)
+
+% --- BACKGROUND WITH GRADIENT EFFECT ---
+0.97 0.97 0.97 rg  % Very light gray background
+0 0 612 792 re f
+
+% White content area with shadow effect
+0.92 0.92 0.92 rg
+40 40 532 712 re f
+1 1 1 rg
+36 36 540 720 re f
+
+% --- HEADER WITH DUAL COLOR STRIPES ---
+0.1 0.3 0.6 rg    % Dark blue stripe
+36 750 540 25 re f
+0.2 0.5 0.9 rg    % Medium blue stripe
+36 775 540 15 re f
+
+% White text with bold title
+1 1 1 rg
+BT /F2 28 Tf 150 760 Td (SERVICE RECORD) Tj ET
+0.95 0.95 0.95 rg
+BT /F1 14 Tf 180 735 Td (Official Vehicle Maintenance & Service Documentation) Tj ET
+
+% Decorative separator
+0.8 0.2 0.2 rg    % Red accent
+36 720 540 3 re f
+
+% Logo/Organization area (simulated)
+0.95 0.97 1 rg
+36 680 540 30 re f
+0 0 0.3 rg
+BT /F2 16 Tf 240 690 Td (BACOLOD CITY GOVERNMENT - MOTOR POOL DIVISION) Tj ET
+0.7 0.7 0.7 rg
+BT /F1 9 Tf 400 675 Td (Form No. SR-MP-2024) Tj ET
+
+% --- VEHICLE INFORMATION SECTION ---
+0 0 0.4 rg
+BT /F2 15 Tf 46 650 Td (VEHICLE INFORMATION) Tj ET
+0.2 0.5 0.8 rg
+46 647 200 2 re f
+0 0 0 rg
+
+% Vehicle info box with light blue background
+0.95 0.98 1 rg
+46 610 520 35 re f
+0.2 0.5 0.8 rg
+46 610 520 35 re S
+0 0 0 rg
+
+BT /F1 10 Tf 60 630 Td (Plate Number: _______________  Make/Model: _______________________________________) Tj ET
+BT /F1 10 Tf 60 615 Td (Vehicle Type: _______________  Year: ________  Current Odometer: _______________ km) Tj ET
+
+% --- SERVICE DETAILS HEADER ---
+0 0 0.4 rg
+BT /F2 15 Tf 46 585 Td (SERVICE DETAILS) Tj ET
+0.2 0.5 0.8 rg
+46 582 150 2 re f
+0 0 0 rg
+
+% Service details in a structured table format
+0.95 0.97 1 rg
+46 490 520 90 re f
+0.7 0.7 0.7 rg
+46 490 520 90 re S
+
+% Column headers with colored background
+0.85 0.9 1 rg
+46 570 520 20 re f
+0.2 0.4 0.7 rg
+46 570 520 20 re S
+1 1 1 rg
+BT /F2 11 Tf 55 575 Td (SERVICE DATE) Tj ET
+BT /F2 11 Tf 170 575 Td (SERVICE TYPE) Tj ET
+BT /F2 11 Tf 300 575 Td (MILEAGE (km)) Tj ET
+BT /F2 11 Tf 390 575 Td (COST (₱)) Tj ET
+BT /F2 11 Tf 470 575 Td (NEXT SERVICE) Tj ET
+
+% Service rows with alternating colors
+0.97 0.99 1 rg
+46 550 520 15 re f
+0 0 0 rg
+BT /F1 10 Tf 50 554 Td (________________) Tj ET
+BT /F1 10 Tf 165 554 Td (____________________) Tj ET
+BT /F1 10 Tf 290 554 Td (_________) Tj ET
+BT /F1 10 Tf 385 554 Td (__________") Tj ET
+BT /F1 10 Tf 465 554 Td (_____________") Tj ET
+
+0.92 0.96 1 rg
+46 535 520 15 re f
+0 0 0 rg
+BT /F1 10 Tf 50 539 Td (________________) Tj ET
+BT /F1 10 Tf 165 539 Td (____________________) Tj ET
+BT /F1 10 Tf 290 539 Td (_________) Tj ET
+BT /F1 10 Tf 385 539 Td (__________") Tj ET
+BT /F1 10 Tf 465 539 Td (_____________") Tj ET
+
+% Continue with more rows...
+0.97 0.99 1 rg
+46 520 520 15 re f
+0 0 0 rg
+BT /F1 10 Tf 50 524 Td (________________) Tj ET
+BT /F1 10 Tf 165 524 Td (____________________) Tj ET
+BT /F1 10 Tf 290 524 Td (_________) Tj ET
+BT /F1 10 Tf 385 524 Td (__________") Tj ET
+BT /F1 10 Tf 465 524 Td (_____________") Tj ET
+
+0.92 0.96 1 rg
+46 505 520 15 re f
+0 0 0 rg
+BT /F1 10 Tf 50 509 Td (________________) Tj ET
+BT /F1 10 Tf 165 509 Td (____________________) Tj ET
+BT /F1 10 Tf 290 509 Td (_________) Tj ET
+BT /F1 10 Tf 385 509 Td (__________") Tj ET
+BT /F1 10 Tf 465 509 Td (_____________") Tj ET
+
+0.97 0.99 1 rg
+46 490 520 15 re f
+0 0 0 rg
+BT /F1 10 Tf 50 494 Td (________________) Tj ET
+BT /F1 10 Tf 165 494 Td (____________________) Tj ET
+BT /F1 10 Tf 290 494 Td (_________) Tj ET
+BT /F1 10 Tf 385 494 Td (__________") Tj ET
+BT /F1 10 Tf 465 494 Td (_____________") Tj ET
+
+% --- SERVICE TYPES SECTION ---
+0 0 0.4 rg
+BT /F2 15 Tf 46 465 Td (SERVICE CHECKLIST) Tj ET
+0.2 0.5 0.8 rg
+46 462 160 2 re f
+0 0 0 rg
+
+% Checklist with two columns
+0.95 0.98 1 rg
+46 350 520 110 re f
+0.2 0.5 0.8 rg
+46 350 520 110 re S
+0 0 0 rg
+
+BT /F2 11 Tf 55 445 Td (MAINTENANCE ITEMS CHECKED (✓) OR PERFORMED (X):) Tj ET
+
+% Left column
+0.8 0.8 0.8 rg
+BT /F1 10 Tf 60 430 Td ([ ] Oil Change                  [ ] Brake Fluid Change     [ ] Tire Rotation") Tj ET
+BT /F1 10 Tf 60 415 Td ([ ] Air Filter Replacement     [ ] Cabin Air Filter      [ ] Spark Plugs") Tj ET
+BT /F1 10 Tf 60 400 Td ([ ] Brake Inspection           [ ] Tire Pressure Check   [ ] Alignment") Tj ET
+BT /F1 10 Tf 60 385 Td ([ ] Battery Check              [ ] Belts & Hoses         [ ] Suspension") Tj ET
+BT /F1 10 Tf 60 370 Td ([ ] Coolant Flush              [ ] Transmission Fluid    [ ] Wheel Balance") Tj ET
+BT /F1 10 Tf 60 355 Td ([ ] Lights Check               [ ] Wiper Blades          [ ] Exhaust System") Tj ET
+
+% --- TECHNICIAN & APPROVAL SECTION ---
+0 0 0.4 rg
+BT /F2 15 Tf 46 335 Td ("CERTIFICATION & AUTHORIZATION") Tj ET
+0.2 0.5 0.8 rg
+46 332 250 2 re f
+0 0 0 rg
+
+% Technician box
+0.95 0.98 1 rg
+46 250 250 80 re f
+0.2 0.4 0.7 rg
+46 250 250 80 re S
+0 0 0 rg
+
+BT /F2 11 Tf 55 315 Td ("TECHNICIAN'S CERTIFICATION") Tj ET
+BT /F1 9 Tf 65 300 Td ("I certify that the above services have") Tj ET
+BT /F1 9 Tf 65 290 Td ("been performed in accordance with") Tj ET
+BT /F1 9 Tf 65 280 Td ("manufacturer specifications.") Tj ET
+
+0.7 0.7 0.7 rg
+65 250 180 15 re S
+65 230 180 15 re S
+0 0 0 rg
+
+BT /F1 10 Tf 70 255 Td ("Technician's Signature") Tj ET
+BT /F1 9 Tf 70 235 Td ("License/ID No.: ____________") Tj ET
+
+% Supervisor box
+0.95 0.98 1 rg
+316 250 250 80 re f
+0.2 0.4 0.7 rg
+316 250 250 80 re S
+0 0 0 rg
+
+BT /F2 11 Tf 325 315 Td ("SUPERVISOR'S APPROVAL") Tj ET
+BT /F1 9 Tf 335 300 Td ("Service Approved: [ ] Yes  [ ] No") Tj ET
+BT /F1 9 Tf 335 290 Td ("Quality Check:    [ ] Pass [ ] Fail") Tj ET
+BT /F1 9 Tf 335 280 Td ("Remarks: ___________________________") Tj ET
+
+0.7 0.7 0.7 rg
+335 250 180 15 re S
+335 230 180 15 re S
+0 0 0 rg
+
+BT /F1 10 Tf 340 255 Td ("Supervisor's Signature") Tj ET
+BT /F1 9 Tf 340 235 Td ("Date: _______________") Tj ET
+
+% --- IMPORTANT NOTES SECTION ---
+0.98 0.95 0.95 rg  % Light red/pink background
+46 160 520 60 re f
+0.8 0.3 0.3 rg     % Red border
+46 160 520 60 re S
+0 0 0 rg
+
+BT /F2 12 Tf 55 205 Td ("⚠ IMPORTANT NOTES & REMINDERS") Tj ET
+BT /F1 9 Tf 60 190 Td ("1. Keep this record for warranty claims and resale purposes.") Tj ET
+BT /F1 9 Tf 60 180 Td ("2. Next scheduled maintenance due at: ________________________ km or by: ________/________/________") Tj ET
+BT /F1 9 Tf 60 170 Td ("3. For emergency roadside assistance, contact Motor Pool: (034) 433-9999") Tj ET
+
+% --- FOOTER WITH CONTACT INFO ---
+0.9 0.9 0.9 rg
+36 36 540 40 re f
+0.4 0.4 0.4 rg
+
+BT /F1 8 Tf 40 60 Td ("BACOLOD CITY MOTOR POOL DIVISION | City Hall Compound, Bacolod City 6100") Tj ET
+BT /F1 8 Tf 40 50 Td ("Telephone: (034) 433-8888 local 123 | Email: motorpool@bacolodcity.gov.ph | Open: Mon-Fri 8AM-5PM") Tj ET
+0.6 0.6 0.6 rg
+BT /F1 7 Tf 480 60 Td ("Document ID: SR") Tj
+BT /F1 7 Tf 480 50 Td (__-__-____-____) Tj ET
+0 0 0 rg
+BT /F1 7 Tf 480 40 Td ("Page 1 of 1") Tj ET
+
+% Decorative bottom border
+0.1 0.3 0.6 rg
+36 36 540 2 re f
+
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000010 00000 n 
+0000000058 00000 n 
+0000000120 00000 n 
+0000000262 00000 n 
+0000003340 00000 n 
+0000003422 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+3490
+%%EOF
+PDF;
+
+    return $pdf;
+}
+
+// Test and save
+$pdfContent = createStyledServiceRecord();
+file_put_contents('service_record_styled.pdf', $pdfContent);
+echo "Styled Service Record PDF created successfully!";
+?>

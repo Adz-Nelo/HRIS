@@ -209,9 +209,27 @@ body {
 
 
 
+.notification-wrapper .notification-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
 
+.notification-wrapper .notification-item:hover {
+    background-color: #f8f9fa !important;
+}
 
+.notification-wrapper .notification-item:active {
+    background-color: #e9ecef !important;
+}
 
+.notification-wrapper .dropdown-menu {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.notification-wrapper .badge {
+    font-size: 0.6rem;
+    padding: 0.25em 0.5em;
+}
 
 
 /* ========== SIDEBAR ========== */

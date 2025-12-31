@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../../config/config.php';
 // ===========================
 // CONFIGURATION
 // ===========================
-$default_profile_image = 'assets/images/default_user.png';
+$default_profile_image = '../../../assets/images/default_user.png';
 $today = date('m-d');
 $logged_in_id = $_SESSION['employee_id'] ?? null;
 

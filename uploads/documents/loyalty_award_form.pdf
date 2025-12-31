@@ -1,0 +1,207 @@
+<?php
+function createProperLoyaltyForm() {
+    $pdf = <<<PDF
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R/Resources << /ProcSet [/PDF /Text] /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 2000 >>
+stream
+% PAGE MARGINS: Left 36pt, Right 36pt (540pt width available)
+
+% --- BACKGROUND ---
+0.95 0.95 0.95 rg  % Light gray background
+0 0 612 792 re f
+
+% White content area
+1 1 1 rg
+36 36 540 720 re f
+
+% --- HEADER WITH COLOR ---
+0.2 0.4 0.8 rg    % Blue header
+36 750 540 40 re f
+
+% White text on blue
+1 1 1 rg
+BT /F2 23 Tf 160 765 Td (CITY OF BACOLOD) Tj ET
+BT /F1 17 Tf 185 745 Td (Human Resource Management Office) Tj ET
+
+% Red accent line
+0.8 0.2 0.2 rg
+36 735 540 2 re f
+
+% --- FORM TITLE WITH DECORATIVE BOX ---
+0.9 0.95 1 rg     % Light blue box
+80 690 452 35 re f
+0 0 0.4 rg        % Dark blue border
+80 690 452 35 re S
+
+% Form title
+0 0 0.4 rg
+BT /F2 21 Tf 130 710 Td (LOYALTY AWARD APPLICATION FORM) Tj ET
+
+% Form number
+0.5 0.5 0.5 rg
+BT /F1 8 Tf 440 695 Td (HRD Form No. LA-2024-001) Tj ET
+
+% --- SECTION 1: EMPLOYEE INFO (with shaded background) ---
+0.95 0.98 1 rg
+46 640 520 50 re f
+0 0 0 rg
+
+BT /F2 13 Tf 50 680 Td (1. EMPLOYEE INFORMATION) Tj ET
+0.2 0.4 0.8 rg
+50 675 180 1 re f
+0 0 0 rg
+
+BT /F1 10 Tf 60 660 Td (Full Name: __________________________________________________________________) Tj ET
+BT /F1 10 Tf 60 645 Td (Position Title: ______________________________________________________________) Tj ET
+BT /F1 10 Tf 60 630 Td (Office/Department: __________________________________________________________) Tj ET
+BT /F1 10 Tf 60 615 Td (Employee ID: _____________________  Salary Grade: ______  Step: ______) Tj ET
+
+% --- SECTION 2: SERVICE DETAILS ---
+0.95 0.98 1 rg
+46 550 520 50 re f
+0 0 0 rg
+
+BT /F2 13 Tf 50 590 Td (2. SERVICE DETAILS) Tj ET
+0.2 0.4 0.8 rg
+50 585 150 1 re f
+0 0 0 rg
+
+BT /F1 10 Tf 60 575 Td (Date of Entry in Government Service: ________________________________________) Tj ET
+BT /F1 10 Tf 60 560 Td (Length of Continuous Service: ________ Years ________ Months) Tj ET
+BT /F1 10 Tf 60 545 Td (Date of Last Loyalty Award Received: _______________________________________) Tj ET
+BT /F1 10 Tf 60 530 Td (Anniversary Date for Current Application: __________________________________) Tj ET
+
+% --- SECTION 3: AWARD SELECTION ---
+0.95 0.98 1 rg
+46 450 520 70 re f
+0 0 0 rg
+
+BT /F2 13 Tf 50 500 Td (3. AWARD LEVEL APPLIED FOR) Tj ET
+0.2 0.4 0.8 rg
+50 495 200 1 re f
+0 0 0 rg
+
+BT /F1 10 Tf 60 480 Td (Please check (X) the appropriate award level based on years of service:) Tj ET
+
+% Two columns for checkboxes with checkboxes
+0.7 0.7 0.7 rg
+BT /F1 10 Tf 70 465 Td ([ ] 10 Years Service Award                [ ] 30 Years Service Award) Tj ET
+BT /F1 10 Tf 70 450 Td ([ ] 15 Years Service Award                [ ] 35 Years Service Award) Tj ET
+BT /F1 10 Tf 70 435 Td ([ ] 20 Years Service Award                [ ] 40 Years Service Award) Tj ET
+BT /F1 10 Tf 70 420 Td ([ ] 25 Years Service Award) Tj ET
+
+0 0 0 rg
+BT /F1 10 Tf 60 405 Td (Other (specify): ________________________________________________________________) Tj ET
+
+% --- SECTION 4: CERTIFICATION ---
+0 0 0 rg
+BT /F2 13 Tf 50 380 Td (4. CERTIFICATION AND APPROVAL) Tj ET
+0.2 0.4 0.8 rg
+50 375 250 1 re f
+0 0 0 rg
+
+% A. Applicant with colored box
+0.95 0.98 1 rg
+60 340 240 80 re f
+0 0 0 rg
+
+BT /F2 11 Tf 70 405 Td (A. APPLICANT'S CERTIFICATION) Tj ET
+BT /F1 9 Tf 80 390 Td (I certify that all information provided in this form is) Tj ET
+BT /F1 9 Tf 80 380 Td (true and correct. I understand that any misrepresentation) Tj ET
+BT /F1 9 Tf 80 370 Td (may result in disqualification.) Tj ET
+
+0.7 0.7 0.7 rg
+80 340 180 15 re S
+80 320 180 15 re S
+0 0 0 rg
+
+BT /F1 9 Tf 85 345 Td (Signature over Printed Name) Tj ET
+BT /F1 9 Tf 85 325 Td (Date) Tj ET
+
+% B. Supervisor with colored box
+0.95 0.98 1 rg
+320 340 240 80 re f
+0 0 0 rg
+
+BT /F2 11 Tf 330 405 Td (B. SUPERVISOR'S RECOMMENDATION) Tj ET
+BT /F1 9 Tf 340 390 Td (Recommendation:  [ ] Approved    [ ] Not Approved) Tj ET
+BT /F1 9 Tf 340 380 Td (Remarks: _________________________________________) Tj ET
+
+0.7 0.7 0.7 rg
+340 340 180 15 re S
+340 320 180 15 re S
+0 0 0 rg
+
+BT /F1 9 Tf 345 345 Td (Signature over Printed Name) Tj ET
+BT /F1 9 Tf 345 325 Td (Date) Tj ET
+
+% C. HRD Office with colored box
+0.95 0.98 1 rg
+60 240 500 70 re f
+0 0 0 rg
+
+BT /F2 11 Tf 70 295 Td (C. HRD OFFICE ACTION) Tj ET
+BT /F1 9 Tf 80 280 Td ([ ] Approved    [ ] Disapproved    [ ] For Review    [ ] Requirements Incomplete) Tj ET
+BT /F1 9 Tf 80 270 Td (Remarks: ___________________________________________________________________) Tj ET
+
+0.7 0.7 0.7 rg
+80 240 180 15 re S
+80 220 180 15 re S
+280 240 180 15 re S
+0 0 0 rg
+
+BT /F1 9 Tf 85 245 Td (HRD Officer Signature) Tj ET
+BT /F1 9 Tf 85 225 Td (Date) Tj ET
+BT /F1 9 Tf 285 245 Td (Official Stamp Here) Tj ET
+
+% --- FOOTER WITH COLORED BACKGROUND ---
+0.9 0.9 0.9 rg
+36 36 540 30 re f
+0 0 0 rg
+
+BT /F1 7 Tf 40 50 Td (INSTRUCTIONS: 1. Submit with certified Service Record. 2. Attach recent 2x2 ID picture. 3. Submit at least 30 days before anniversary.) Tj ET
+BT /F1 7 Tf 40 40 Td (HRD Office, Bacolod City Hall | Tel: (034) 433-1234 local 402 | Email: hrd@bacolodcity.gov.ph) Tj ET
+BT /F1 7 Tf 480 50 Td (Page 1 of 1) Tj ET
+
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000010 00000 n 
+0000000058 00000 n 
+0000000120 00000 n 
+0000000262 00000 n 
+0000001940 00000 n 
+0000002022 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+2090
+%%EOF
+PDF;
+
+    return $pdf;
+}
+
+// Test and save
+$pdfContent = createProperLoyaltyForm();
+file_put_contents('loyalty_form_colorful.pdf', $pdfContent);
+echo "PDF created with colors and smaller text!";
+?>

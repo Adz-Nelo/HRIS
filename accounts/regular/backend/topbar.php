@@ -3,6 +3,13 @@
 session_start();
 include '../../../config/config.php'; // adjust path if needed
 
+// In your topbar.php file, add the notification bell
+// require_once '../../../includes/notification_bell.php"';
+
+// echo '<div class="d-flex align-items-center">';
+// echo renderNotificationBell($_SESSION['employee_id']);
+// echo '</div>';
+
 // Default profile image
 $profile_image = '../../assets/images/default_user.png';
 

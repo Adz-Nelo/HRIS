@@ -1,0 +1,330 @@
+<?php
+function createBenefitClaimSummary() {
+    $pdf = <<<PDF
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R/Resources << /ProcSet [/PDF /Text] /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 4500 >>
+stream
+% PAGE MARGINS: Left 36pt, Right 36pt (540pt width available)
+
+% --- BACKGROUND WITH SOFT GRADIENT ---
+0.98 0.98 0.96 rg  % Cream background
+0 0 612 792 re f
+
+% White content area with subtle shadow
+0.95 0.95 0.95 rg
+38 38 536 716 re f
+1 1 1 rg
+36 36 540 720 re f
+
+% --- HEADER WITH GRADIENT BANNER ---
+0.1 0.4 0.7 rg     % Deep blue
+36 750 540 40 re f
+0.3 0.6 0.9 rg     % Lighter blue
+36 770 540 20 re f
+
+% White text with title
+1 1 1 rg
+BT /F2 30 Tf 150 760 Td (BENEFIT CLAIM SUMMARY) Tj ET
+0.95 0.97 1 rg
+BT /F1 14 Tf 200 730 Td (Employee Benefits & Entitlements Tracking System) Tj ET
+
+% Gold accent line
+0.9 0.7 0.2 rg
+36 720 540 4 re f
+
+% --- CITY GOVERNMENT BADGE ---
+0.95 0.97 1 rg
+36 690 540 25 re f
+0.1 0.3 0.6 rg
+BT /F2 16 Tf 210 695 Td (CITY OF BACOLOD - HUMAN RESOURCE MANAGEMENT OFFICE) Tj ET
+0.6 0.6 0.6 rg
+BT /F1 9 Tf 480 682 Td (Form: HRD-BCS-2024) Tj ET
+
+% --- EMPLOYEE INFORMATION SECTION ---
+0 0 0.4 rg
+BT /F2 16 Tf 46 660 Td (1. EMPLOYEE INFORMATION) Tj ET
+0.2 0.5 0.8 rg
+46 657 220 2 re f
+
+% Employee info box with light blue background
+0.97 0.99 1 rg
+46 610 520 45 re f
+0.2 0.4 0.7 rg
+46 610 520 45 re S
+0 0 0 rg
+
+BT /F1 11 Tf 60 640 Td (Employee Name: _______________________________________________________________) Tj ET
+BT /F1 11 Tf 60 625 Td (Employee ID: _______________  Department: ________________________  Position: _______________) Tj ET
+BT /F1 11 Tf 60 610 Td (Employment Date: _______________  Salary Grade: ______  Step: ______  Status: [ ] Permanent [ ] Casual) Tj ET
+
+% --- CLAIM SUMMARY SECTION ---
+0 0 0.4 rg
+BT /F2 16 Tf 46 585 Td (2. BENEFIT CLAIM SUMMARY) Tj ET
+0.9 0.5 0.2 rg
+46 582 250 2 re f
+0 0 0 rg
+
+% Summary table with colored headers
+0.95 0.98 1 rg
+46 450 520 130 re f
+0.7 0.7 0.7 rg
+46 450 520 130 re S
+
+% Table headers with gradient
+0.85 0.92 1 rg
+46 580 520 25 re f
+0.1 0.3 0.6 rg
+46 580 520 25 re S
+1 1 1 rg
+BT /F2 12 Tf 55 588 Td (BENEFIT TYPE") Tj ET
+BT /F2 12 Tf 220 588 Td ("ENTITLED AMOUNT") Tj ET
+BT /F2 12 Tf 320 588 Td ("CLAIMED") Tj ET
+BT /F2 12 Tf 400 588 Td ("BALANCE") Tj ET
+BT /F2 12 Tf 480 588 Td ("STATUS") Tj ET
+
+% Row 1 - Leave Benefits
+0.98 0.99 1 rg
+46 555 520 20 re f
+0 0 0 rg
+BT /F2 11 Tf 50 562 Td ("Vacation Leave") Tj ET
+BT /F1 10 Tf 220 562 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 320 562 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 400 562 Td ("₱ ______________") Tj ET
+0 0.5 0.2 rg
+BT /F1 10 Tf 480 562 Td ("[ ] Available") Tj ET
+
+% Row 2 - Sick Leave
+0.92 0.97 1 rg
+46 535 520 20 re f
+0 0 0 rg
+BT /F2 11 Tf 50 542 Td ("Sick Leave") Tj ET
+BT /F1 10 Tf 220 542 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 320 542 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 400 542 Td ("₱ ______________") Tj ET
+0 0.5 0.2 rg
+BT /F1 10 Tf 480 542 Td ("[ ] Available") Tj ET
+
+% Row 3 - Hazard Pay
+0.98 0.99 1 rg
+46 515 520 20 re f
+0 0 0 rg
+BT /F2 11 Tf 50 522 Td ("Hazard Pay") Tj ET
+BT /F1 10 Tf 220 522 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 320 522 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 400 522 Td ("₱ ______________") Tj ET
+0.8 0.2 0.2 rg
+BT /F1 10 Tf 480 522 Td ("[ ] Claimed") Tj ET
+
+% Row 4 - Clothing Allowance
+0.92 0.97 1 rg
+46 495 520 20 re f
+0 0 0 rg
+BT /F2 11 Tf 50 502 Td ("Clothing Allowance") Tj ET
+BT /F1 10 Tf 220 502 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 320 502 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 400 502 Td ("₱ ______________") Tj ET
+0.8 0.2 0.2 rg
+BT /F1 10 Tf 480 502 Td ("[ ] Claimed") Tj ET
+
+% Row 5 - Year-end Bonus
+0.98 0.99 1 rg
+46 475 520 20 re f
+0 0 0 rg
+BT /F2 11 Tf 50 482 Td ("Year-end Bonus") Tj ET
+BT /F1 10 Tf 220 482 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 320 482 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 400 482 Td ("₱ ______________") Tj ET
+0.9 0.7 0.2 rg
+BT /F1 10 Tf 480 482 Td ("[ ] Pending") Tj ET
+
+% Row 6 - Cash Gift
+0.92 0.97 1 rg
+46 455 520 20 re f
+0 0 0 rg
+BT /F2 11 Tf 50 462 Td ("Cash Gift") Tj ET
+BT /F1 10 Tf 220 462 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 320 462 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 400 462 Td ("₱ ______________") Tj ET
+0.9 0.7 0.2 rg
+BT /F1 10 Tf 480 462 Td ("[ ] Pending") Tj ET
+
+% Row 7 - Other Benefits
+0.98 0.99 1 rg
+46 435 520 20 re f
+0 0 0 rg
+BT /F2 11 Tf 50 442 Td ("Other (Specify): ________________) Tj ET
+BT /F1 10 Tf 220 442 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 320 442 Td ("₱ ______________") Tj ET
+BT /F1 10 Tf 400 442 Td ("₱ ______________") Tj ET
+0.6 0.6 0.6 rg
+BT /F1 10 Tf 480 442 Td ("[ ] N/A") Tj ET
+
+% --- TOTAL SUMMARY BOX ---
+0.1 0.4 0.7 rg
+46 400 520 30 re f
+1 1 1 rg
+BT /F2 14 Tf 200 410 Td (TOTAL BENEFITS SUMMARY) Tj ET
+
+% Totals row
+0.95 0.98 1 rg
+46 370 520 25 re f
+0.1 0.3 0.6 rg
+46 370 520 25 re S
+0 0 0 rg
+BT /F2 13 Tf 50 380 Td ("TOTALS:") Tj ET
+BT /F1 12 Tf 220 380 Td ("₱ ______________") Tj ET
+BT /F1 12 Tf 320 380 Td ("₱ ______________") Tj ET
+BT /F1 12 Tf 400 380 Td ("₱ ______________") Tj ET
+0.9 0.5 0.2 rg
+BT /F2 12 Tf 480 380 Td ("OVERALL STATUS") Tj ET
+
+% --- CLAIM DETAILS SECTION ---
+0 0 0.4 rg
+BT /F2 16 Tf 46 340 Td (3. CLAIM DETAILS & DOCUMENTATION) Tj ET
+0.9 0.5 0.2 rg
+46 337 300 2 re f
+0 0 0 rg
+
+% Documentation checklist
+0.98 0.99 1 rg
+46 280 520 55 re f
+0.2 0.4 0.7 rg
+46 280 520 55 re S
+
+BT /F2 11 Tf 55 325 Td ("REQUIRED DOCUMENTS SUBMITTED:") Tj ET
+0.7 0.7 0.7 rg
+BT /F1 10 Tf 60 310 Td ("[ ] Service Record     [ ] Leave Form     [ ] Payslip     [ ] ID Picture (2x2)") Tj ET
+BT /F1 10 Tf 60 295 Td ("[ ] Medical Certificate [ ] Authorization  [ ] Valid ID Copy  [ ] Bank Details") Tj ET
+BT /F1 10 Tf 60 280 Td ("Other Documents: _________________________________________________________________") Tj ET
+
+% --- APPROVAL SECTION WITH MULTI-LEVEL BOXES ---
+0 0 0.4 rg
+BT /F2 16 Tf 46 260 Td (4. APPROVAL & CERTIFICATION) Tj ET
+0.1 0.4 0.7 rg
+46 257 220 2 re f
+
+% Three-column approval section
+0.97 0.99 1 rg
+46 170 165 85 re f
+0.2 0.4 0.7 rg
+46 170 165 85 re S
+0 0 0 rg
+BT /F2 11 Tf 55 240 Td ("APPLICANT'S DECLARATION") Tj ET
+BT /F1 9 Tf 60 225 Td ("I hereby certify that all") Tj ET
+BT /F1 9 Tf 60 215 Td ("information provided is") Tj ET
+BT /F1 9 Tf 60 205 Td ("true and correct.") Tj ET
+0.7 0.7 0.7 rg
+60 185 140 15 re S
+60 165 140 15 re S
+0 0 0 rg
+BT /F1 10 Tf 65 190 Td ("Signature") Tj ET
+BT /F1 9 Tf 65 170 Td ("Date: ___________") Tj ET
+
+% Supervisor box
+0.97 0.99 1 rg
+221 170 165 85 re f
+0.2 0.4 0.7 rg
+221 170 165 85 re S
+0 0 0 rg
+BT /F2 11 Tf 230 240 Td ("SUPERVISOR'S REVIEW") Tj ET
+BT /F1 9 Tf 235 225 Td ("Recommendation:") Tj ET
+0.7 0.7 0.7 rg
+BT /F1 9 Tf 235 215 Td ("[ ] Approved    [ ] For Review") Tj ET
+BT /F1 9 Tf 235 205 Td ("[ ] Not Approved") Tj ET
+0 0 0 rg
+0.7 0.7 0.7 rg
+235 185 140 15 re S
+235 165 140 15 re S
+0 0 0 rg
+BT /F1 10 Tf 240 190 Td ("Supervisor's Signature") Tj ET
+BT /F1 9 Tf 240 170 Td ("Date: ___________") Tj ET
+
+% HRD box
+0.97 0.99 1 rg
+396 170 170 85 re f
+0.2 0.4 0.7 rg
+396 170 170 85 re S
+0 0 0 rg
+BT /F2 11 Tf 405 240 Td ("HRD OFFICE ACTION") Tj ET
+BT /F1 9 Tf 410 225 Td ("Status: [ ] Processed") Tj ET
+BT /F1 9 Tf 410 215 Td ("       [ ] For Payment") Tj ET
+BT /F1 9 Tf 410 205 Td ("       [ ] On Hold") Tj ET
+0.7 0.7 0.7 rg
+410 185 140 15 re S
+410 165 140 15 re S
+0 0 0 rg
+BT /F1 10 Tf 415 190 Td ("HRD Officer") Tj ET
+BT /F1 9 Tf 415 170 Td ("Date: ___________") Tj ET
+
+% --- IMPORTANT NOTES SECTION ---
+0.98 0.96 0.95 rg  % Light orange background
+46 120 520 40 re f
+0.9 0.6 0.3 rg     % Orange border
+46 120 520 40 re S
+0 0 0 rg
+
+BT /F2 11 Tf 55 145 Td ("⚠ IMPORTANT NOTES:") Tj ET
+BT /F1 8 Tf 60 135 Td ("1. Submit complete requirements to HRD Office, 2nd Floor City Hall") Tj ET
+BT /F1 8 Tf 60 125 Td ("2. Processing time: 7-10 working days | 3. For inquiries: (034) 433-1234 local 402") Tj ET
+
+% --- FOOTER WITH DETAILED INFO ---
+0.9 0.92 0.95 rg
+36 36 540 35 re f
+0.4 0.4 0.4 rg
+
+BT /F1 8 Tf 40 55 Td ("HUMAN RESOURCE MANAGEMENT OFFICE | Bacolod City Government | Republic of the Philippines") Tj ET
+BT /F1 8 Tf 40 45 Td ("Address: City Hall Building, Gatuslao St., Bacolod City 6100 | Email: hrd@bacolodcity.gov.ph") Tj ET
+0.6 0.6 0.6 rg
+BT /F1 7 Tf 480 55 Td ("Claim Ref: BCS") Tj
+BT /F1 7 Tf 480 45 Td ("YYYY-MM-XXXX") Tj ET
+0 0 0 rg
+BT /F1 7 Tf 480 40 Td ("Page 1 of 1") Tj ET
+
+% Decorative bottom elements
+0.1 0.4 0.7 rg
+36 36 540 2 re f
+0.9 0.7 0.2 rg
+36 70 540 1 re f
+
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000010 00000 n 
+0000000058 00000 n 
+0000000120 00000 n 
+0000000262 00000 n 
+0000004340 00000 n 
+0000004422 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+4490
+%%EOF
+PDF;
+
+    return $pdf;
+}
+
+// Test and save
+$pdfContent = createBenefitClaimSummary();
+file_put_contents('benefit_claim_summary_styled.pdf', $pdfContent);
+echo "Styled Benefit Claim Summary PDF created successfully!";
+?>
