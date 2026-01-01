@@ -1086,6 +1086,45 @@ Compulsory Year: <?= $compulsory_year ?>
             return;
         }
         
+        // After validation passes, make AJAX call
+    // const formData = new FormData(event.target);
+    formData.append('employee_id', phpData.employeeId);
+    formData.append('request_type', 'retirement_application');
+    formData.append('csrf_token', phpData.csrfToken);
+    
+    fetch('includes/submit_retirement_application.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert(`Retirement application submitted! ${data.hr_notified} HR staff notified.`, 'success');
+            showAlert('HR will contact you within 3-5 working days.', 'info');
+            hideRetirementForm();
+            
+            // Optional: Show tracking information
+            if (data.tracking_number) {
+                showAlert(`Tracking number: ${data.tracking_number}`, 'info');
+            }
+            
+            // Reload page after 3 seconds
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } else {
+            showAlert(data.message || 'Failed to submit application.', 'error');
+            resetSubmitButton(submitBtn, originalText);
+            isSubmitting = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('Network error. Please check your connection.', 'error');
+        resetSubmitButton(submitBtn, originalText);
+        isSubmitting = false;
+    });
+        
         // Check date is in future
         const selectedDate = new Date(lastDay);
         const today = new Date();
@@ -1159,11 +1198,65 @@ Compulsory Year: <?= $compulsory_year ?>
     // ============================================
     
     function requestServiceRecord() {
-        if (confirm('Send a formal request to HR Staff for an updated Service Record?')) {
-            showAlert('Request sent successfully. HR staff will be notified.', 'success');
-            // In real implementation, make an AJAX call here
-        }
+    if (confirm('Send a formal request to HR Staff for an updated Service Record?\n\nHR will be notified immediately.')) {
+        // Show loading state
+        const btn = event.target.closest('.btn-more');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Requesting...';
+        btn.disabled = true;
+        
+        // Make AJAX request to notify HR
+        fetch('/HRIS/includes/request_service_record.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                employee_id: phpData.employeeId,
+                request_type: 'service_record',
+                csrf_token: phpData.csrfToken
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                showAlert(`Service Record request sent successfully! ${data.hr_notified} HR staff notified.`, 'success');
+                
+                // Optionally update UI
+                if (data.estimated_time) {
+                    showAlert(`HR will process your request within ${data.estimated_time}.`, 'info');
+                }
+                
+                // Disable button or change text
+                btn.innerHTML = '<i class="fas fa-clock me-1"></i> Requested (Pending)';
+                btn.disabled = true;
+                btn.style.backgroundColor = '#6b7280';
+                
+                // Update the badge
+                const badge = btn.closest('.ann-text').querySelector('.badge');
+                if (badge) {
+                    badge.className = 'badge badge-warning';
+                    badge.textContent = 'Requested';
+                }
+            } else {
+                showAlert(data.message || 'Failed to send request. Please try again.', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert(`Network error: ${error.message}. Please check your connection.`, 'error');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
     }
+}
     
     function downloadServiceRecord() {
         // In real implementation, this would download the actual file
