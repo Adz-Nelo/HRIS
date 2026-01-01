@@ -127,7 +127,7 @@ try {
     </div>
 
     <!-- Add this JavaScript BEFORE the closing </body> tag -->
-    <!-- <script>
+    <script>
     async function includeHTML(id, file) {
         const element = document.getElementById(id);
         if (!element) return;
@@ -143,15 +143,15 @@ try {
     // Initialize the sidebar/topbar/rightbar
     async function initMessagesPage() {
         // IMPORTANT: Adjust these paths for the regular employee folder
-        await includeHTML('sidebar-placeholder', '../backend/sidebar.php');
+        // await includeHTML('sidebar-placeholder', '../backend/sidebar.php');
         await includeHTML('topbar-placeholder', '../backend/topbar.php');
         await includeHTML('rightbar-placeholder', '../backend/rightbar.php');
     }
 
     // Call initialization
     document.addEventListener('DOMContentLoaded', initMessagesPage);
-    </script> -->
+    </script>
     
-    <!-- <script src="/HRIS/assets/js/script.js"></script> -->
+    <script src="/HRIS/assets/js/script.js"></script>
 </body>
 </html>
