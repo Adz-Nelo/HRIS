@@ -42,7 +42,7 @@ try {
     // Get all departments
     $deptStmt = $pdo->query("SELECT * FROM department ORDER BY department_name");
     $departments = $deptStmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     // Check if we got departments
     if (!$departments) {
         $error = "No departments found in the database.";
@@ -53,15 +53,15 @@ try {
                                        WHERE department_id = ? AND gender = 'Male' AND status = 'Active'");
             $maleStmt->execute([$dept['department_id']]);
             $maleCount = $maleStmt->fetchColumn();
-            
+
             // Count females in department
             $femaleStmt = $pdo->prepare("SELECT COUNT(*) as female_count FROM employee 
                                          WHERE department_id = ? AND gender = 'Female' AND status = 'Active'");
             $femaleStmt->execute([$dept['department_id']]);
             $femaleCount = $femaleStmt->fetchColumn();
-            
+
             $totalDept = $maleCount + $femaleCount;
-            
+
             $genderStats[] = [
                 'department_id' => $dept['department_id'],
                 'department_name' => $dept['department_name'],
@@ -71,18 +71,17 @@ try {
                 'male_percentage' => $totalDept > 0 ? round(($maleCount / $totalDept) * 100, 1) : 0,
                 'female_percentage' => $totalDept > 0 ? round(($femaleCount / $totalDept) * 100, 1) : 0
             ];
-            
+
             $totalMale += $maleCount;
             $totalFemale += $femaleCount;
             $totalEmployees += $totalDept;
         }
-        
+
         // Calculate overall percentages
         $totalEmployees = $totalMale + $totalFemale;
         $malePercentage = $totalEmployees > 0 ? round(($totalMale / $totalEmployees) * 100, 1) : 0;
         $femalePercentage = $totalEmployees > 0 ? round(($totalFemale / $totalEmployees) * 100, 1) : 0;
     }
-    
 } catch (PDOException $e) {
     $error = "Database error: " . $e->getMessage();
     // For debugging, you can uncomment the next line:
@@ -92,28 +91,30 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gender Distribution Report - Admin</title>
     <link rel="stylesheet" href="/HRIS/assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" href="../../assets/images/HRMS.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* ... your existing styles ... */
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f5f7fa;
             color: #333;
         }
-        
+
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -121,21 +122,21 @@ try {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         .header h1 {
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 1.8rem;
         }
-        
+
         .nav-links {
             display: flex;
             gap: 20px;
         }
-        
+
         .nav-links a {
             color: white;
             text-decoration: none;
@@ -143,30 +144,30 @@ try {
             border-radius: 6px;
             transition: background 0.3s;
         }
-        
+
         .nav-links a:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
         }
-        
+
         .nav-links a.active {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
-        
+
         .container {
             max-width: 1400px;
             margin: 30px auto;
             padding: 0 20px;
         }
-        
+
         .card {
             background: white;
             border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             margin-bottom: 30px;
             border: 1px solid #eaeaea;
         }
-        
+
         .card h2 {
             color: #2d3748;
             margin-bottom: 20px;
@@ -176,67 +177,67 @@ try {
             align-items: center;
             gap: 10px;
         }
-        
+
         .summary-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
-        
+
         .summary-card {
             background: white;
             border-radius: 10px;
             padding: 25px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             text-align: center;
             border-top: 4px solid;
         }
-        
+
         .summary-card.male {
             border-top-color: #3498db;
         }
-        
+
         .summary-card.female {
             border-top-color: #e84393;
         }
-        
+
         .summary-card.total {
             border-top-color: #2ecc71;
         }
-        
+
         .summary-card h3 {
             font-size: 2.5rem;
             margin: 10px 0;
         }
-        
+
         .chart-container {
             height: 400px;
             margin: 30px 0;
         }
-        
+
         .gender-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        
+
         .gender-table th {
             background: #f8f9fa;
             padding: 15px;
             text-align: left;
             border-bottom: 2px solid #dee2e6;
         }
-        
+
         .gender-table td {
             padding: 12px 15px;
             border-bottom: 1px solid #dee2e6;
         }
-        
+
         .gender-table tr:hover {
             background: #f8f9fa;
         }
-        
+
         .progress-bar-container {
             width: 100px;
             height: 20px;
@@ -246,26 +247,26 @@ try {
             display: inline-block;
             margin: 0 10px;
         }
-        
+
         .progress-bar {
             height: 100%;
             display: inline-block;
         }
-        
+
         .progress-male {
             background: #3498db;
         }
-        
+
         .progress-female {
             background: #e84393;
         }
-        
+
         .export-buttons {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-        
+
         .btn-export {
             padding: 10px 20px;
             border: none;
@@ -276,105 +277,106 @@ try {
             gap: 8px;
             font-size: 14px;
         }
-        
+
         .btn-pdf {
             background: #dc3545;
             color: white;
         }
-        
+
         .btn-excel {
             background: #28a745;
             color: white;
         }
-        
+
         .btn-print {
             background: #17a2b8;
             color: white;
         }
-        
+
         .legend {
             display: flex;
             gap: 20px;
             margin: 20px 0;
             justify-content: center;
         }
-        
+
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        
+
         .legend-color {
             width: 20px;
             height: 20px;
             border-radius: 4px;
         }
-        
+
         .legend-male {
             background: #3498db;
         }
-        
+
         .legend-female {
             background: #e84393;
         }
-        
+
         .department-name {
             font-weight: 600;
             color: #2c3e50;
         }
-        
+
         .count-badge {
             padding: 3px 10px;
             border-radius: 20px;
             font-size: 0.8em;
             font-weight: 600;
         }
-        
+
         .male-badge {
             background: #3498db;
             color: white;
         }
-        
+
         .female-badge {
             background: #e84393;
             color: white;
         }
-        
+
         .alert {
             padding: 15px;
             border-radius: 8px;
             margin: 20px 0;
         }
-        
+
         .alert-danger {
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
+
         .alert-info {
             background: #d1ecf1;
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
-        
+
         /* HIDE PRINT DOCUMENT ON SCREEN */
         .print-document {
             display: none;
         }
-        
+
         /* ============================================
            PRINT-SPECIFIC STYLES - DOCUMENT STYLE
         ============================================ */
-        
+
         @media print {
+
             /* Reset for print */
             * {
                 box-shadow: none !important;
                 text-shadow: none !important;
             }
-            
+
             body {
                 margin: 0 !important;
                 padding: 0 !important;
@@ -384,7 +386,7 @@ try {
                 background: #fff !important;
                 font-family: "Arial", "Helvetica", sans-serif !important;
             }
-            
+
             /* Hide all screen elements */
             .header,
             .nav-links,
@@ -405,7 +407,7 @@ try {
                 margin: 0 !important;
                 padding: 0 !important;
             }
-            
+
             /* Show print document */
             .print-document {
                 display: block !important;
@@ -415,17 +417,17 @@ try {
                 margin: 0 !important;
                 padding: 20px !important;
             }
-            
+
             /* Page breaks */
             .page-break {
                 page-break-before: always;
             }
-            
+
             .avoid-break {
                 page-break-inside: avoid;
                 break-inside: avoid;
             }
-            
+
             /* Document header */
             .document-header {
                 text-align: center;
@@ -434,19 +436,19 @@ try {
                 margin-bottom: 30px;
                 page-break-after: avoid;
             }
-            
+
             .document-header h1 {
                 color: #000 !important;
                 font-size: 22pt !important;
                 margin: 0 0 5px 0 !important;
             }
-            
+
             .document-header .subtitle {
                 color: #555 !important;
                 font-size: 12pt !important;
                 margin-bottom: 10px !important;
             }
-            
+
             .document-header .metadata {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
@@ -455,7 +457,7 @@ try {
                 font-size: 9pt;
                 color: #666;
             }
-            
+
             .document-header .metadata div {
                 text-align: center;
                 padding: 8px;
@@ -465,20 +467,20 @@ try {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            
+
             .document-header .metadata strong {
                 display: block;
                 color: #000;
                 margin-bottom: 3px;
             }
-            
+
             /* Document sections */
             .document-section {
                 margin-bottom: 30px;
                 page-break-inside: avoid;
                 padding: 0;
             }
-            
+
             .document-section h2 {
                 color: #000 !important;
                 font-size: 14pt !important;
@@ -487,7 +489,7 @@ try {
                 border-bottom: 2px solid #000;
                 page-break-after: avoid;
             }
-            
+
             /* Document tables */
             .document-table {
                 width: 100%;
@@ -496,7 +498,7 @@ try {
                 font-size: 9pt;
                 page-break-inside: avoid;
             }
-            
+
             .document-table th {
                 background: #f5f5f5 !important;
                 color: #000 !important;
@@ -507,20 +509,20 @@ try {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            
+
             .document-table td {
                 border: 1px solid #ddd !important;
                 padding: 8px !important;
                 vertical-align: top;
                 color: #000 !important;
             }
-            
+
             .document-table tr:nth-child(even) {
                 background: #fafafa !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            
+
             /* Statistics grid for print */
             .print-stats-grid {
                 display: grid;
@@ -529,7 +531,7 @@ try {
                 margin: 20px 0;
                 page-break-inside: avoid;
             }
-            
+
             .print-stat-box {
                 border: 1px solid #ddd;
                 padding: 15px;
@@ -539,7 +541,7 @@ try {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            
+
             .print-stat-value {
                 font-size: 18pt;
                 font-weight: bold;
@@ -547,14 +549,14 @@ try {
                 margin: 10px 0;
                 display: block;
             }
-            
+
             .print-stat-label {
                 font-size: 9pt;
                 color: #666;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
             }
-            
+
             /* Footer */
             .print-footer {
                 margin-top: 40px;
@@ -566,15 +568,15 @@ try {
                 bottom: 0;
                 width: 100%;
             }
-            
+
             .print-footer table {
                 width: 100%;
             }
-            
+
             .print-footer td {
                 padding: 5px 0;
             }
-            
+
             /* Badges for print */
             .print-badge {
                 display: inline-block;
@@ -587,41 +589,41 @@ try {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            
+
             /* Utilities */
             .text-center {
                 text-align: center;
             }
-            
+
             .text-right {
                 text-align: right;
             }
-            
+
             .strong {
                 font-weight: bold;
             }
-            
+
             .muted {
                 color: #666;
             }
         }
-        
+
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
                 gap: 15px;
                 text-align: center;
             }
-            
+
             .nav-links {
                 flex-wrap: wrap;
                 justify-content: center;
             }
-            
+
             .export-buttons {
                 flex-direction: column;
             }
-            
+
             .chart-container {
                 height: 300px;
             }
@@ -643,15 +645,15 @@ try {
 
     <!-- Main Content -->
     <div class="container">
-        <div class="card">
+        <!-- <div class="card">
             <h1><i class="fas fa-chart-pie me-2"></i> Gender Distribution Report</h1>
             <p>Male and female employee count per department</p>
-        </div>
-        
+        </div> -->
+
         <?php if (isset($error)): ?>
             <div class="alert alert-danger"><?php echo $error; ?></div>
         <?php endif; ?>
-        
+
         <!-- Summary Cards -->
         <div class="summary-cards">
             <div class="summary-card male">
@@ -660,14 +662,14 @@ try {
                 <p>Total Male Employees</p>
                 <div style="font-size: 1.2rem; font-weight: bold; color: #3498db;"><?php echo $malePercentage; ?>%</div>
             </div>
-            
+
             <div class="summary-card female">
                 <i class="fas fa-female fa-3x" style="color: #e84393; margin-bottom: 15px;"></i>
                 <h3><?php echo $totalFemale; ?></h3>
                 <p>Total Female Employees</p>
                 <div style="font-size: 1.2rem; font-weight: bold; color: #e84393;"><?php echo $femalePercentage; ?>%</div>
             </div>
-            
+
             <div class="summary-card total">
                 <i class="fas fa-users fa-3x" style="color: #2ecc71; margin-bottom: 15px;"></i>
                 <h3><?php echo $totalEmployees; ?></h3>
@@ -675,7 +677,7 @@ try {
                 <div style="font-size: 1.2rem; font-weight: bold; color: #2ecc71;">100%</div>
             </div>
         </div>
-        
+
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2><i class="fas fa-table me-2"></i>Gender Distribution by Department</h2>
@@ -691,7 +693,7 @@ try {
                     </button>
                 </div>
             </div>
-            
+
             <div class="legend">
                 <div class="legend-item">
                     <div class="legend-color legend-male"></div>
@@ -702,11 +704,11 @@ try {
                     <span>Female Employees</span>
                 </div>
             </div>
-            
+
             <div class="chart-container">
                 <canvas id="genderChart"></canvas>
             </div>
-            
+
             <?php if (empty($genderStats)): ?>
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle"></i> No employee data found or no departments with active employees.
@@ -748,13 +750,13 @@ try {
                                     <?php echo $stat['female_percentage']; ?>%
                                 </td>
                                 <td>
-                                    <?php 
-                                        if ($stat['female_count'] > 0) {
-                                            $ratio = $stat['male_count'] / $stat['female_count'];
-                                            echo number_format($ratio, 2) . ':1';
-                                        } else {
-                                            echo 'N/A';
-                                        }
+                                    <?php
+                                    if ($stat['female_count'] > 0) {
+                                        $ratio = $stat['male_count'] / $stat['female_count'];
+                                        echo number_format($ratio, 2) . ':1';
+                                    } else {
+                                        echo 'N/A';
+                                    }
                                     ?>
                                 </td>
                             </tr>
@@ -769,13 +771,13 @@ try {
                             <td><?php echo $malePercentage; ?>%</td>
                             <td><?php echo $femalePercentage; ?>%</td>
                             <td>
-                                <?php 
-                                    if ($totalFemale > 0) {
-                                        $overallRatio = $totalMale / $totalFemale;
-                                        echo number_format($overallRatio, 2) . ':1';
-                                    } else {
-                                        echo 'N/A';
-                                    }
+                                <?php
+                                if ($totalFemale > 0) {
+                                    $overallRatio = $totalMale / $totalFemale;
+                                    echo number_format($overallRatio, 2) . ':1';
+                                } else {
+                                    echo 'N/A';
+                                }
                                 ?>
                             </td>
                         </tr>
@@ -783,14 +785,14 @@ try {
                 </table>
             <?php endif; ?>
         </div>
-        
+
         <div class="card">
             <h2><i class="fas fa-chart-bar me-2"></i>Department Comparison</h2>
             <div class="chart-container">
                 <canvas id="deptComparisonChart"></canvas>
             </div>
         </div>
-        
+
         <div class="card">
             <h2><i class="fas fa-info-circle me-2"></i>Report Information</h2>
             <ul style="list-style: none; padding: 0;">
@@ -808,7 +810,7 @@ try {
             <h1>GENDER DISTRIBUTION REPORT</h1>
             <div class="subtitle">Male and Female Employee Analysis by Department</div>
             <div class="subtitle" style="font-size: 10pt;">Generated on: <?php echo date('F d, Y \a\t h:i A'); ?></div>
-            
+
             <div class="metadata">
                 <div>
                     <strong>Total Male</strong>
@@ -824,10 +826,10 @@ try {
                 </div>
             </div>
         </div>
-        
+
         <div class="document-section">
             <h2>EXECUTIVE SUMMARY</h2>
-            
+
             <div class="print-stats-grid">
                 <div class="print-stat-box">
                     <span class="print-stat-label">Male Employees</span>
@@ -842,23 +844,23 @@ try {
                 <div class="print-stat-box">
                     <span class="print-stat-label">Gender Ratio</span>
                     <span class="print-stat-value">
-                        <?php 
-                            if ($totalFemale > 0) {
-                                $overallRatio = $totalMale / $totalFemale;
-                                echo number_format($overallRatio, 1) . ':1';
-                            } else {
-                                echo 'N/A';
-                            }
+                        <?php
+                        if ($totalFemale > 0) {
+                            $overallRatio = $totalMale / $totalFemale;
+                            echo number_format($overallRatio, 1) . ':1';
+                        } else {
+                            echo 'N/A';
+                        }
                         ?>
                     </span>
                     <div class="muted">Male:Female ratio</div>
                 </div>
             </div>
         </div>
-        
+
         <div class="document-section">
             <h2>DETAILED DEPARTMENT ANALYSIS</h2>
-            
+
             <?php if (empty($genderStats)): ?>
                 <div style="text-align: center; padding: 40px; color: #666;">
                     <i class="fas fa-info-circle" style="font-size: 48px; margin-bottom: 20px;"></i>
@@ -892,13 +894,13 @@ try {
                                     <td><?php echo $stat['male_percentage']; ?>%</td>
                                     <td><?php echo $stat['female_percentage']; ?>%</td>
                                     <td>
-                                        <?php 
-                                            if ($stat['female_count'] > 0) {
-                                                $ratio = $stat['male_count'] / $stat['female_count'];
-                                                echo number_format($ratio, 1) . ':1';
-                                            } else {
-                                                echo 'N/A';
-                                            }
+                                        <?php
+                                        if ($stat['female_count'] > 0) {
+                                            $ratio = $stat['male_count'] / $stat['female_count'];
+                                            echo number_format($ratio, 1) . ':1';
+                                        } else {
+                                            echo 'N/A';
+                                        }
                                         ?>
                                     </td>
                                 </tr>
@@ -914,13 +916,13 @@ try {
                             <td class="strong"><?php echo $malePercentage; ?>%</td>
                             <td class="strong"><?php echo $femalePercentage; ?>%</td>
                             <td class="strong">
-                                <?php 
-                                    if ($totalFemale > 0) {
-                                        $overallRatio = $totalMale / $totalFemale;
-                                        echo number_format($overallRatio, 1) . ':1';
-                                    } else {
-                                        echo 'N/A';
-                                    }
+                                <?php
+                                if ($totalFemale > 0) {
+                                    $overallRatio = $totalMale / $totalFemale;
+                                    echo number_format($overallRatio, 1) . ':1';
+                                } else {
+                                    echo 'N/A';
+                                }
                                 ?>
                             </td>
                         </tr>
@@ -928,70 +930,70 @@ try {
                 </table>
             <?php endif; ?>
         </div>
-        
+
         <?php if (!empty($genderStats) && $totalEmployees > 0): ?>
-        <div class="document-section">
-            <h2>KEY FINDINGS</h2>
-            <div style="margin: 15px 0;">
-                <?php 
-                // Find department with most males
-                $maxMale = max(array_column($genderStats, 'male_count'));
-                $maxMaleDepts = array_filter($genderStats, fn($stat) => $stat['male_count'] == $maxMale);
-                
-                // Find department with most females
-                $maxFemale = max(array_column($genderStats, 'female_count'));
-                $maxFemaleDepts = array_filter($genderStats, fn($stat) => $stat['female_count'] == $maxFemale);
-                
-                // Find most balanced department
-                $mostBalanced = null;
-                $minDifference = PHP_INT_MAX;
-                
-                foreach($genderStats as $stat) {
-                    if ($stat['total'] > 0) {
-                        $difference = abs($stat['male_percentage'] - $stat['female_percentage']);
-                        if ($difference < $minDifference) {
-                            $minDifference = $difference;
-                            $mostBalanced = $stat;
+            <div class="document-section">
+                <h2>KEY FINDINGS</h2>
+                <div style="margin: 15px 0;">
+                    <?php
+                    // Find department with most males
+                    $maxMale = max(array_column($genderStats, 'male_count'));
+                    $maxMaleDepts = array_filter($genderStats, fn($stat) => $stat['male_count'] == $maxMale);
+
+                    // Find department with most females
+                    $maxFemale = max(array_column($genderStats, 'female_count'));
+                    $maxFemaleDepts = array_filter($genderStats, fn($stat) => $stat['female_count'] == $maxFemale);
+
+                    // Find most balanced department
+                    $mostBalanced = null;
+                    $minDifference = PHP_INT_MAX;
+
+                    foreach ($genderStats as $stat) {
+                        if ($stat['total'] > 0) {
+                            $difference = abs($stat['male_percentage'] - $stat['female_percentage']);
+                            if ($difference < $minDifference) {
+                                $minDifference = $difference;
+                                $mostBalanced = $stat;
+                            }
                         }
                     }
-                }
-                ?>
-                
-                <?php if ($maxMale > 0): ?>
-                <div style="margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-left: 4px solid #3498db;">
-                    <strong>Largest Male Presence:</strong> 
-                    <?php
-                    foreach($maxMaleDepts as $dept) {
-                        echo htmlspecialchars($dept['department_name']) . " ({$dept['male_count']} employees)";
-                    }
                     ?>
+
+                    <?php if ($maxMale > 0): ?>
+                        <div style="margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-left: 4px solid #3498db;">
+                            <strong>Largest Male Presence:</strong>
+                            <?php
+                            foreach ($maxMaleDepts as $dept) {
+                                echo htmlspecialchars($dept['department_name']) . " ({$dept['male_count']} employees)";
+                            }
+                            ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($maxFemale > 0): ?>
+                        <div style="margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-left: 4px solid #e84393;">
+                            <strong>Largest Female Presence:</strong>
+                            <?php
+                            foreach ($maxFemaleDepts as $dept) {
+                                echo htmlspecialchars($dept['department_name']) . " ({$dept['female_count']} employees)";
+                            }
+                            ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($mostBalanced && $mostBalanced['total'] > 0): ?>
+                        <div style="padding: 10px; background: #f9f9f9; border-left: 4px solid #2ecc71;">
+                            <strong>Most Balanced Department:</strong>
+                            <?php
+                            echo htmlspecialchars($mostBalanced['department_name']) .
+                                " (M: {$mostBalanced['male_percentage']}%, F: {$mostBalanced['female_percentage']}%)";
+                            ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
-                
-                <?php if ($maxFemale > 0): ?>
-                <div style="margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-left: 4px solid #e84393;">
-                    <strong>Largest Female Presence:</strong> 
-                    <?php
-                    foreach($maxFemaleDepts as $dept) {
-                        echo htmlspecialchars($dept['department_name']) . " ({$dept['female_count']} employees)";
-                    }
-                    ?>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($mostBalanced && $mostBalanced['total'] > 0): ?>
-                <div style="padding: 10px; background: #f9f9f9; border-left: 4px solid #2ecc71;">
-                    <strong>Most Balanced Department:</strong> 
-                    <?php
-                    echo htmlspecialchars($mostBalanced['department_name']) . 
-                         " (M: {$mostBalanced['male_percentage']}%, F: {$mostBalanced['female_percentage']}%)";
-                    ?>
-                </div>
-                <?php endif; ?>
             </div>
-        </div>
         <?php endif; ?>
-        
+
         <!-- DOCUMENT FOOTER -->
         <div class="print-footer">
             <table>
@@ -1016,146 +1018,146 @@ try {
     </div>
 
     <script>
-    // Initialize charts
-    document.addEventListener('DOMContentLoaded', function() {
-        // Data from PHP
-        const departments = <?php echo !empty($genderStats) ? json_encode(array_column($genderStats, 'department_name')) : '[]'; ?>;
-        const maleData = <?php echo !empty($genderStats) ? json_encode(array_column($genderStats, 'male_count')) : '[]'; ?>;
-        const femaleData = <?php echo !empty($genderStats) ? json_encode(array_column($genderStats, 'female_count')) : '[]'; ?>;
-        
-        // Only create charts if we have data
-        if (<?php echo $totalEmployees; ?> > 0) {
-            // Pie Chart - Overall Gender Distribution
-            const ctx1 = document.getElementById('genderChart');
-            if (ctx1) {
-                new Chart(ctx1.getContext('2d'), {
-                    type: 'pie',
-                    data: {
-                        labels: ['Male', 'Female'],
-                        datasets: [{
-                            data: [<?php echo $totalMale; ?>, <?php echo $totalFemale; ?>],
-                            backgroundColor: ['#3498db', '#e84393'],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'right'
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.label || '';
-                                        let value = context.raw;
-                                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                        let percentage = Math.round((value / total) * 100);
-                                        return `${label}: ${value} (${percentage}%)`;
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data from PHP
+            const departments = <?php echo !empty($genderStats) ? json_encode(array_column($genderStats, 'department_name')) : '[]'; ?>;
+            const maleData = <?php echo !empty($genderStats) ? json_encode(array_column($genderStats, 'male_count')) : '[]'; ?>;
+            const femaleData = <?php echo !empty($genderStats) ? json_encode(array_column($genderStats, 'female_count')) : '[]'; ?>;
+
+            // Only create charts if we have data
+            if (<?php echo $totalEmployees; ?> > 0) {
+                // Pie Chart - Overall Gender Distribution
+                const ctx1 = document.getElementById('genderChart');
+                if (ctx1) {
+                    new Chart(ctx1.getContext('2d'), {
+                        type: 'pie',
+                        data: {
+                            labels: ['Male', 'Female'],
+                            datasets: [{
+                                data: [<?php echo $totalMale; ?>, <?php echo $totalFemale; ?>],
+                                backgroundColor: ['#3498db', '#e84393'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right'
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.label || '';
+                                            let value = context.raw;
+                                            let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            let percentage = Math.round((value / total) * 100);
+                                            return `${label}: ${value} (${percentage}%)`;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                });
-            }
-            
-            // Bar Chart - Department Comparison (only if we have departments with data)
-            const ctx2 = document.getElementById('deptComparisonChart');
-            if (ctx2 && departments.length > 0) {
-                new Chart(ctx2.getContext('2d'), {
-                    type: 'bar',
-                    data: {
-                        labels: departments,
-                        datasets: [
-                            {
-                                label: 'Male',
-                                data: maleData,
-                                backgroundColor: '#3498db',
-                                borderWidth: 1
+                    });
+                }
+
+                // Bar Chart - Department Comparison (only if we have departments with data)
+                const ctx2 = document.getElementById('deptComparisonChart');
+                if (ctx2 && departments.length > 0) {
+                    new Chart(ctx2.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: departments,
+                            datasets: [{
+                                    label: 'Male',
+                                    data: maleData,
+                                    backgroundColor: '#3498db',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'Female',
+                                    data: femaleData,
+                                    backgroundColor: '#e84393',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    stacked: true,
+                                },
+                                y: {
+                                    stacked: true,
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Employees'
+                                    }
+                                }
                             },
-                            {
-                                label: 'Female',
-                                data: femaleData,
-                                backgroundColor: '#e84393',
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                stacked: true,
-                            },
-                            y: {
-                                stacked: true,
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Number of Employees'
+                            plugins: {
+                                legend: {
+                                    position: 'top',
                                 }
                             }
-                        },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            }
                         }
-                    }
+                    });
+                }
+            } else {
+                // Hide chart containers if no data
+                document.querySelectorAll('.chart-container').forEach(container => {
+                    container.innerHTML = '<div style="text-align: center; padding: 60px; color: #666;"><i class="fas fa-chart-pie fa-3x"></i><p>No data available for charts</p></div>';
                 });
             }
-        } else {
-            // Hide chart containers if no data
-            document.querySelectorAll('.chart-container').forEach(container => {
-                container.innerHTML = '<div style="text-align: center; padding: 60px; color: #666;"><i class="fas fa-chart-pie fa-3x"></i><p>No data available for charts</p></div>';
-            });
+        });
+
+        function exportToPDF() {
+            // Show instructions for saving as PDF
+            const message = 'To save as PDF:\n\n' +
+                '1. Click the PRINT button below\n' +
+                '2. In the print dialog, change "Destination" to "Save as PDF"\n' +
+                '3. Click "Save"\n\n' +
+                'OR use the keyboard shortcut:\n' +
+                '• Windows: Ctrl+P, then choose "Microsoft Print to PDF"\n' +
+                '• Mac: Cmd+P, then click "PDF" > "Save as PDF"';
+
+            if (confirm(message + '\n\nDo you want to open the print dialog now?')) {
+                window.print();
+            }
         }
-    });
-    
-    function exportToPDF() {
-    // Show instructions for saving as PDF
-    const message = 'To save as PDF:\n\n' +
-                   '1. Click the PRINT button below\n' +
-                   '2. In the print dialog, change "Destination" to "Save as PDF"\n' +
-                   '3. Click "Save"\n\n' +
-                   'OR use the keyboard shortcut:\n' +
-                   '• Windows: Ctrl+P, then choose "Microsoft Print to PDF"\n' +
-                   '• Mac: Cmd+P, then click "PDF" > "Save as PDF"';
-    
-    if (confirm(message + '\n\nDo you want to open the print dialog now?')) {
-        window.print();
-    }
-}
-    
-    function exportToExcel() {
-        // Create Excel data
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Gender Distribution Report\r\n";
-        csvContent += "Generated: " + new Date().toLocaleDateString() + "\r\n\r\n";
-        csvContent += "Department,Male Employees,Female Employees,Total,Male %,Female %,Gender Ratio\r\n";
-        
-        <?php if (!empty($genderStats)): ?>
-            <?php foreach ($genderStats as $stat): ?>
-                csvContent += "<?php echo addslashes($stat['department_name']); ?>,<?php echo $stat['male_count']; ?>,<?php echo $stat['female_count']; ?>,<?php echo $stat['total']; ?>,<?php echo $stat['male_percentage']; ?>%,<?php echo $stat['female_percentage']; ?>%,";
-                csvContent += "<?php echo ($stat['female_count'] > 0) ? number_format($stat['male_count']/$stat['female_count'], 2) . ':1' : 'N/A'; ?>\r\n";
-            <?php endforeach; ?>
-        <?php endif; ?>
-        
-        csvContent += "TOTAL,<?php echo $totalMale; ?>,<?php echo $totalFemale; ?>,<?php echo $totalEmployees; ?>,<?php echo $malePercentage; ?>%,<?php echo $femalePercentage; ?>%,";
-        csvContent += "<?php echo ($totalFemale > 0) ? number_format($totalMale/$totalFemale, 2) . ':1' : 'N/A'; ?>\r\n";
-        
-        // Create download link
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "gender_report_<?php echo date('Y-m-d'); ?>.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+
+        function exportToExcel() {
+            // Create Excel data
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Gender Distribution Report\r\n";
+            csvContent += "Generated: " + new Date().toLocaleDateString() + "\r\n\r\n";
+            csvContent += "Department,Male Employees,Female Employees,Total,Male %,Female %,Gender Ratio\r\n";
+
+            <?php if (!empty($genderStats)): ?>
+                <?php foreach ($genderStats as $stat): ?>
+                    csvContent += "<?php echo addslashes($stat['department_name']); ?>,<?php echo $stat['male_count']; ?>,<?php echo $stat['female_count']; ?>,<?php echo $stat['total']; ?>,<?php echo $stat['male_percentage']; ?>%,<?php echo $stat['female_percentage']; ?>%,";
+                    csvContent += "<?php echo ($stat['female_count'] > 0) ? number_format($stat['male_count'] / $stat['female_count'], 2) . ':1' : 'N/A'; ?>\r\n";
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            csvContent += "TOTAL,<?php echo $totalMale; ?>,<?php echo $totalFemale; ?>,<?php echo $totalEmployees; ?>,<?php echo $malePercentage; ?>%,<?php echo $femalePercentage; ?>%,";
+            csvContent += "<?php echo ($totalFemale > 0) ? number_format($totalMale / $totalFemale, 2) . ':1' : 'N/A'; ?>\r\n";
+
+            // Create download link
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "gender_report_<?php echo date('Y-m-d'); ?>.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
+
 </html>

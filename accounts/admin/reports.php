@@ -153,8 +153,8 @@ try {
                             </div>
                         </div>
                     </div>
-
-                    <div class="content-card">
+                    <br>
+                    <div class="content-card" style="margin: auto;">
                         <div class="report-log-header" style="padding: 15px 25px; border-bottom: 1px solid #f1f5f9;">
                             <h2 style="font-size: 15px; font-weight: 700;">Overall Ratio</h2>
                         </div>

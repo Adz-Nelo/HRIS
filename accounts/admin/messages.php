@@ -80,6 +80,20 @@ try {
         .notif-title { font-weight: 700; color: #1e293b; margin-bottom: 2px; display: block; }
         .notif-text { color: #64748b; font-size: 0.9rem; }
         .notif-time { font-size: 0.75rem; color: #94a3b8; margin-top: 5px; }
+
+        #markAllReadBtn {
+            background-color:rgba(37, 100, 235, 0.93);
+            border: transparent;
+            padding: 8px;
+            border-radius: 5px;
+            color: #FFF;
+            cursor: pointer;
+        }
+
+        #markAllReadBtn:hover {
+            background-color:rgb(41, 94, 210);
+            border: transparent;
+        }
         
         /* Toast notification styles */
         .toast-container {
