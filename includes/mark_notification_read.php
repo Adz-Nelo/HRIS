@@ -3,28 +3,35 @@
 session_start();
 require_once '../config/config.php';
 
-header('Content-Type: application/json');
-
-// Get JSON input
-$input = json_decode(file_get_contents('php://input'), true);
-
-// Validate CSRF token
-if (!isset($input['csrf_token']) || $input['csrf_token'] !== $_SESSION['csrf_token']) {
-    echo json_encode(['success' => false, 'message' => 'Security token invalid']);
-    exit;
+if (!isset($_SESSION['employee_id'])) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    exit();
 }
 
-if (!isset($input['notification_id'])) {
-    echo json_encode(['success' => false, 'message' => 'Notification ID required']);
-    exit;
-}
-
-try {
-    $stmt = $pdo->prepare("UPDATE notifications SET is_read = 1 WHERE notification_id = ?");
-    $stmt->execute([$input['notification_id']]);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notification_id'])) {
+    $employee_id = $_SESSION['employee_id'];
+    $notification_id = intval($_POST['notification_id']);
     
-    echo json_encode(['success' => true, 'message' => 'Notification marked as read']);
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    try {
+        // Verify the notification belongs to the current user
+        $stmt = $pdo->prepare("UPDATE notifications SET is_read = 1 WHERE notification_id = ? AND employee_id = ?");
+        $stmt->execute([$notification_id, $employee_id]);
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Notification marked as read'
+        ]);
+    } catch (PDOException $e) {
+        error_log("Error marking notification as read: " . $e->getMessage());
+        echo json_encode([
+            'success' => false,
+            'message' => 'Failed to update notification'
+        ]);
+    }
+} else {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid request'
+    ]);
 }
-?>

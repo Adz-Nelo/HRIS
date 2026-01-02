@@ -162,7 +162,7 @@ try {
         <div class="employee-item">
             <div class="emp-left">
                 <div class="avatar-container">
-                    <img src="<?= htmlspecialchars($emp['profile_image']); ?>" class="profile-pic">
+                    <img src="../../assets/images/default_user.png" class="profile-pic">
                     <div class="status-indicator <?= $emp['is_online'] ? 'online' : '' ?>"></div>
                 </div>
                 <div class="emp-info-text">

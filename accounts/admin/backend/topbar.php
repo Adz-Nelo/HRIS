@@ -68,4 +68,31 @@ document.getElementById('menuToggle').addEventListener('click', function() {
         sidebar.classList.toggle('collapsed');
     }
 });
+
+// Function to update notification count in the topbar
+function updateNotificationCount() {
+    fetch('/HRIS/includes/get_notification_count.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const badge = document.querySelector('.notification-badge');
+                if (badge) {
+                    if (data.count > 0) {
+                        badge.textContent = data.count;
+                        badge.style.display = 'inline-block';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+                
+                // Update page title
+                const title = document.title.replace(/^\(\d+\)\s*/, '');
+                document.title = data.count > 0 ? `(${data.count}) ${title}` : title;
+            }
+        })
+        .catch(error => console.error('Error fetching notification count:', error));
+}
+
+// Call this function periodically or after marking notifications as read
+setInterval(updateNotificationCount, 30000); // Update every 30 seconds
 </script>
