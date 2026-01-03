@@ -131,6 +131,47 @@ try {
         ]);
     }
 
+    // After password verification succeeds
+if ($user && password_verify($password, $user['password'])) {
+    
+    // Check if 2FA is enabled
+    if ($user['two_fa_enabled'] == 1 && $user['two_fa_method'] != 'none') {
+        // Generate 2FA code
+        $code = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        
+        // Store in database
+        $stmt = $pdo->prepare("
+            UPDATE employee 
+            SET two_fa_code = ?,
+                two_fa_code_expiry = ?,
+                two_fa_attempts = 0
+            WHERE employee_id = ?
+        ");
+        $stmt->execute([$code, $expiry, $user['employee_id']]);
+        
+        // Send based on method
+        if ($user['two_fa_method'] === 'email' && !empty($user['email'])) {
+            send2FAEmail($user['email'], $code);
+        } elseif ($user['two_fa_method'] === 'sms' && !empty($user['contact_number'])) {
+            send2FASMS($user['contact_number'], $code);
+        }
+        
+        // Set session for 2FA verification
+        $_SESSION['2fa_employee_id'] = $user['employee_id'];
+        $_SESSION['2fa_method'] = $user['two_fa_method'];
+        
+        // Redirect to 2FA verification
+        header('Location: verify_2fa.php');
+        exit();
+    } else {
+        // No 2FA, proceed with normal login
+        $_SESSION['employee_id'] = $user['employee_id'];
+        $_SESSION['role'] = $user['role'];
+        // ... rest of your login code
+    }
+}
+
     // 5. TURN ON THE "REAL-TIME" STATUS LIGHT
     $stmtStatus = $pdo->prepare("
         UPDATE employee

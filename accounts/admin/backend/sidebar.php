@@ -63,6 +63,10 @@ try {
                 <span class="menu-text">User Management</span>
                 <i class="fas fa-chevron-right menu-arrow"></i>
             </a>
+            <a href="2fa_settings.php" class="menu-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>2FA Settings</span>
+            </a>
             <div class="flyout-submenu">
                 <a href="add-employee.php" class="submenu-item"><i class="fas fa-plus"></i> Create Account</a>
                 <a href="manage-accounts.php" class="submenu-item"><i class="fas fa-user-cog"></i> Manage Accounts</a>

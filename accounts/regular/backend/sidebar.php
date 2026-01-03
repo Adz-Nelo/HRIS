@@ -60,6 +60,10 @@ try {
                 <span class="menu-text">Leave</span>
                 <i class="fas fa-chevron-right menu-arrow"></i>
             </a>
+            <a href="2fa_settings.php" class="menu-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>2FA Settings</span>
+            </a>
             <div class="flyout-submenu">
                 <a href="apply-leave.php" class="submenu-item"><i class="fas fa-paper-plane"></i> Apply Leave</a>
                 <a href="track-leave.php" class="submenu-item"><i class="fas fa-route"></i> Track Leave</a>

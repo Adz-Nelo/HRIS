@@ -35,6 +35,135 @@ try {
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+<style>
+    /* Benefits Management Styles */
+.benefit-card {
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    height: 100%;
+    background: white;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-color: #007bff;
+}
+
+.benefit-icon {
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.benefit-list {
+    list-style: none;
+    padding: 0;
+}
+
+.benefit-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+}
+
+.benefit-item:last-child {
+    border-bottom: none;
+}
+
+/* Claims processing styles */
+.claim-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-processing {
+    background: #cce5ff;
+    color: #004085;
+}
+
+/* Enrollment wizard */
+.enrollment-step {
+    display: none;
+}
+
+.enrollment-step.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.step-indicator::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    flex: 1;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background: #e9ecef;
+    color: #6c757d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-weight: bold;
+}
+
+.step.active .step-number {
+    background: #007bff;
+    color: white;
+}
+
+.step.completed .step-number {
+    background: #28a745;
+    color: white;
+}
+</style>
+
 <div class="sidebar" id="sidebar">
     <div class="sidebar-user-role">
         <div class="role-icon">
@@ -75,10 +204,34 @@ try {
                 <i class="fas fa-chevron-right menu-arrow"></i>
             </a>
             <div class="flyout-submenu">
-                <a href="validate-claims.php" class="submenu-item"><i class="fa-solid fa-clipboard-check"></i> Validate Claims</a>
-                <a href="manage-dependents.php" class="submenu-item"><i class="fa-solid fa-users-between-lines"></i> Manage Dependents</a>
+                <a href="online-enrollment.php" class="submenu-item">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Online Benefits Enrollment</span>
+                </a>
+                <a href="benefits-claims.php" class="submenu-item">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>Benefits Claims Processing</span>
+                </a>
+                <a href="benefits-portal.php" class="submenu-item">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <span>Benefits Information Portal</span>
+                </a>
+                <a href="manage-dependents.php" class="submenu-item">
+                    <i class="fa-solid fa-users-between-lines"></i>
+                    <span>Dependents Management</span>
+                </a>
+                <a href="validate-claims.php" class="submenu-item">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                    <span>Validate Claims</span>
+                </a>
             </div>
         </div>
+
+        <!-- 2FA Settings - Placed outside Benefits Management -->
+        <a href="2fa_settings.php" class="menu-item">
+            <i class="fas fa-shield-alt"></i>
+            <span class="menu-text">2FA Settings</span>
+        </a>
 
         <div class="has-flyout">
             <a href="#" class="menu-item">

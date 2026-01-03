@@ -5,5 +5,8 @@
         "pragmarx/google2fa": "^9.0",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.6"
+    },
+    "config": {
+        "disable-tls": true
     }
 }
