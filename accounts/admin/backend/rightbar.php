@@ -10,11 +10,11 @@ $logged_in_id = $_SESSION['employee_id'] ?? null;
 
 // Role colors for the badges
 $role_colors = [
-    'Regular Employee' => '#6B7280', // Gray
-    'HR Officer'       => '#10B981', // Green
-    'HR Staff'         => '#3B82F6', // Blue
-    'Department Head'  => '#F59E0B', // Amber
-    'Admin'            => '#EF4444', // Red
+    'Regular Employee' => '#6B7280',
+    'HR Officer'       => '#10B981',
+    'HR Staff'         => '#3B82F6',
+    'Department Head'  => '#F59E0B',
+    'Admin'            => '#EF4444',
 ];
 
 // 1. Fetch Birthdays
@@ -53,7 +53,7 @@ try {
             $last_active = strtotime($row['last_active']);
             $diff = time() - $last_active;
 
-            if ($diff < 120) { // Active within 2 minutes
+            if ($diff < 120) {
                 $is_online = true;
                 $status_text = "Online";
             } elseif ($diff < 3600) {
@@ -80,29 +80,95 @@ try {
 ?>
 
 <style>
-    .right-sidebar { width: 280px; padding: 15px; background: transparent; font-family: 'Inter', Arial, sans-serif; }
+    /* Desktop Styles (unchanged) */
+    .right-sidebar { 
+        width: 280px; 
+        padding: 15px; 
+        background: transparent; 
+        font-family: 'Inter', Arial, sans-serif; 
+    }
     
-    /* Layout */
-    .section-label { font-size: 13px; color: #65676b; font-weight: 600; margin-bottom: 10px; display: block; }
-    .sidebar-divider { border: 0; border-top: 1px solid #e4e6eb; margin: 15px 0; }
+    .section-label { 
+        font-size: 13px; 
+        color: #65676b; 
+        font-weight: 600; 
+        margin-bottom: 10px; 
+        display: block; 
+    }
     
-    /* Employee Items */
-    .employee-item { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-radius: 8px; transition: 0.2s; text-decoration: none; color: inherit; }
-    .employee-item:hover { background: #f2f2f2; }
-    .emp-left { display: flex; align-items: center; gap: 12px; }
+    .sidebar-divider { 
+        border: 0; 
+        border-top: 1px solid #e4e6eb; 
+        margin: 15px 0; 
+    }
     
-    /* Avatar & Status */
-    .avatar-container { position: relative; width: 40px; height: 40px; }
-    .profile-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-    .status-indicator { position: absolute; bottom: 1px; right: 1px; width: 11px; height: 11px; border-radius: 50%; border: 2px solid #fff; background: #9ca3af; }
-    .status-indicator.online { background: #31a24c; }
+    .employee-item { 
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        padding: 8px; 
+        border-radius: 8px; 
+        transition: 0.2s; 
+        text-decoration: none; 
+        color: inherit; 
+    }
+    
+    .employee-item:hover { 
+        background: #f2f2f2; 
+    }
+    
+    .emp-left { 
+        display: flex; 
+        align-items: center; 
+        gap: 12px; 
+    }
+    
+    .avatar-container { 
+        position: relative; 
+        width: 40px; 
+        height: 40px; 
+    }
+    
+    .profile-pic { 
+        width: 100%; 
+        height: 100%; 
+        border-radius: 50%; 
+        object-fit: cover; 
+    }
+    
+    .status-indicator { 
+        position: absolute; 
+        bottom: 1px; 
+        right: 1px; 
+        width: 11px; 
+        height: 11px; 
+        border-radius: 50%; 
+        border: 2px solid #fff; 
+        background: #9ca3af; 
+    }
+    
+    .status-indicator.online { 
+        background: #31a24c; 
+    }
 
-    /* Text info */
-    .emp-info-text { display: flex; flex-direction: column; line-height: 1.2; }
-    .emp-name { font-size: 13px; font-weight: 600; color: #050505; }
-    .status-time { font-size: 11px; color: #65676b; font-weight: 400; }
+    .emp-info-text { 
+        display: flex; 
+        flex-direction: column; 
+        line-height: 1.2; 
+    }
     
-    /* Role Badge (Curved above name) */
+    .emp-name { 
+        font-size: 13px; 
+        font-weight: 600; 
+        color: #050505; 
+    }
+    
+    .status-time { 
+        font-size: 11px; 
+        color: #65676b; 
+        font-weight: 400; 
+    }
+    
     .role-badge {
         font-size: 9px;
         color: white;
@@ -113,6 +179,53 @@ try {
         width: fit-content;
         margin-bottom: 2px;
     }
+
+    /* =========================================== */
+    /* MOBILE STYLES - Hides right sidebar on small screens */
+    /* =========================================== */
+    @media screen and (max-width: 768px) {
+        .right-sidebar {
+            display: none;
+        }
+    }
+    
+    /* Optional: Show a simplified mobile version instead of hiding */
+    /* Uncomment this if you want a mobile-friendly version */
+    /*
+    @media screen and (max-width: 768px) {
+        .right-sidebar {
+            width: 100%;
+            padding: 10px;
+            position: static;
+            margin-top: 20px;
+            border-top: 1px solid #e4e6eb;
+        }
+        
+        .employee-item {
+            padding: 10px 5px;
+        }
+        
+        .avatar-container {
+            width: 36px;
+            height: 36px;
+        }
+        
+        .emp-name {
+            font-size: 14px;
+        }
+        
+        .role-badge {
+            font-size: 8px;
+            padding: 1px 4px;
+        }
+        
+        .sponsored-section, 
+        .birthday-section,
+        .rightbar-header {
+            padding: 0 5px;
+        }
+    }
+    */
 </style>
 
 <div class="right-sidebar" id="right-sidebar">
@@ -180,3 +293,22 @@ try {
         <?php endforeach; ?>
     </div>
 </div>
+
+<!-- Optional: Add a mobile toggle button if you want to show/hide the sidebar on mobile -->
+<!--
+<button id="mobileRightbarToggle" style="display: none; position: fixed; bottom: 80px; right: 20px; z-index: 1000; background: #4361ee; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px;">
+    <i class="fas fa-users"></i>
+</button>
+
+<script>
+    // Show/hide right sidebar on mobile
+    if (window.innerWidth <= 768) {
+        document.getElementById('mobileRightbarToggle').style.display = 'block';
+        
+        document.getElementById('mobileRightbarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('right-sidebar');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+</script>
+-->
