@@ -1,1 +1,2 @@
-Developed and enhanced by Adz-Nelo
+Developed and enhanced:
+by Adriel Bigcas
